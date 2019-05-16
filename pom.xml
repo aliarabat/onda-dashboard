@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.onda</groupId>
-    <artifactId>personnel</artifactId>
+    <artifactId>dashboard</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>personnel</name>
+    <name>dashboard</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
