@@ -3,6 +3,7 @@ package com.onda.dashboard.bean;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,7 @@ public class InterventionMonth {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LocalDate dateIntervention;
+    private LocalTime expectedBreakPeriodMaintenance;
     @OneToMany
     private List<InterventionDay> interventionPartDays;
 
@@ -39,6 +41,14 @@ public class InterventionMonth {
         this.interventionPartDays = interventionPartDays;
     }
 
+    public LocalTime getExpectedBreakPeriodMaintenance() {
+        return expectedBreakPeriodMaintenance;
+    }
+
+    public void setExpectedBreakPeriodMaintenance(LocalTime expectedBreakPeriodMaintenance) {
+        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -47,7 +57,6 @@ public class InterventionMonth {
     }
 
     /**
-     *
      * @param object
      * @return
      */
@@ -64,5 +73,5 @@ public class InterventionMonth {
         return true;
     }
 
-    
+
 }

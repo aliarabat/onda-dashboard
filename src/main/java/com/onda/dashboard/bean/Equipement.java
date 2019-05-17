@@ -14,7 +14,6 @@ public class Equipement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String reference;
     private String name;
     private String type;
 
@@ -24,14 +23,6 @@ public class Equipement {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 
     public String getName() {
