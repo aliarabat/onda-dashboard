@@ -5,7 +5,6 @@
  */
 package com.onda.dashboard.rest.converter;
 
-import com.onda.dashboard.bean.Intervention;
 import com.onda.dashboard.bean.InterventionDay;
 import com.onda.dashboard.common.util.DateUtil;
 import com.onda.dashboard.common.util.NumberUtil;
@@ -29,14 +28,15 @@ public class InterventionDayConverter extends AbstractConverter<InterventionDay,
         } else {
             InterventionDay interventionDay = new InterventionDay();
             interventionDay.setId(vo.getId());
+            interventionDay.setEquipement(new EquipementConverter().toItem(vo.getEquipementVo()));
             interventionDay.setAnomaly(vo.getAnomaly());
             interventionDay.setActions(vo.getActions());
             interventionDay.setBreakNumber(NumberUtil.toInt(vo.getBreakNumber()));
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            interventionDay.setCallIntervention(LocalDateTime.parse(vo.getCallIntervention() , formatter));
-            interventionDay.setInterventionEnd(LocalDateTime.parse(vo.getInterventionEnd() , formatter));
-            interventionDay.setInterventionStart(LocalDateTime.parse(vo.getInterventionStart() , formatter));
+            interventionDay.setCallIntervention(LocalDateTime.parse(vo.getCallIntervention(), formatter));
+            interventionDay.setInterventionEnd(LocalDateTime.parse(vo.getInterventionEnd(), formatter));
+            interventionDay.setInterventionStart(LocalDateTime.parse(vo.getInterventionStart(), formatter));
             interventionDay.setBreakDuration(Duration.parse(vo.getBreakDuration()));
             interventionDay.setReparationDuration(Duration.parse(vo.getReparationDuration()));
             return interventionDay;
@@ -50,6 +50,7 @@ public class InterventionDayConverter extends AbstractConverter<InterventionDay,
         } else {
             InterventionDayVo interventionDayVo = new InterventionDayVo();
             interventionDayVo.setId(item.getId());
+            interventionDayVo.setEquipementVo(new EquipementConverter().toVo(item.getEquipement()));
             interventionDayVo.setAnomaly(item.getAnomaly());
             interventionDayVo.setActions(item.getActions());
             interventionDayVo.setBreakNumber(NumberUtil.fromIntToString(item.getBreakNumber()));

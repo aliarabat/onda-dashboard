@@ -5,6 +5,7 @@
  */
 package com.onda.dashboard.rest.vo;
 
+import com.onda.dashboard.bean.Equipement;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class InterventionDayVo {
 
     private Long id;
+    private EquipementVo equipementVo;
     private String anomaly;
     private String interventionStart;
     private String interventionEnd;
@@ -30,6 +32,14 @@ public class InterventionDayVo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public EquipementVo getEquipementVo() {
+        return equipementVo;
+    }
+
+    public void setEquipementVo(EquipementVo equipementVo) {
+        this.equipementVo = equipementVo;
     }
 
     public String getAnomaly() {
@@ -95,6 +105,5 @@ public class InterventionDayVo {
     public void setActions(String actions) {
         this.actions = actions;
     }
-    
-    
+
 }

@@ -5,7 +5,6 @@
  */
 package com.onda.dashboard.rest.converter;
 
-import com.onda.dashboard.bean.Intervention;
 import com.onda.dashboard.bean.InterventionMonth;
 import com.onda.dashboard.common.util.DateUtil;
 import com.onda.dashboard.rest.vo.InterventionMonthVo;

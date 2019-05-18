@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import javax.persistence.OneToOne;
 
 @Entity
 public class InterventionDay {
@@ -13,6 +14,8 @@ public class InterventionDay {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @OneToOne
+    private Equipement equipement;
     private String anomaly;
     private LocalDateTime interventionStart;
     private LocalDateTime interventionEnd;
@@ -40,6 +43,14 @@ public class InterventionDay {
 
     public LocalDateTime getInterventionStart() {
         return interventionStart;
+    }
+
+    public Equipement getEquipement() {
+        return equipement;
+    }
+
+    public void setEquipement(Equipement equipement) {
+        this.equipement = equipement;
     }
 
     public void setInterventionStart(LocalDateTime interventionStart) {
