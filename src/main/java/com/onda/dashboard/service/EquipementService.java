@@ -6,6 +6,7 @@
 package com.onda.dashboard.service;
 
 import com.onda.dashboard.bean.Equipement;
+import java.util.List;
 
 /**
  *
@@ -13,8 +14,9 @@ import com.onda.dashboard.bean.Equipement;
  */
 public interface EquipementService {
 
-    public Equipement findByReference(String reference);
+    public int createEquipement(List<Equipement> equipements);
 
-    public int create(Equipement equipement);
-
+    public int editEquipement(Equipement newEquipement);
+    
+    public int deleteEquipement(Long id);
 }

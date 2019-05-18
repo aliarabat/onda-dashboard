@@ -10,6 +10,7 @@ import com.onda.dashboard.dao.EquipementDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onda.dashboard.service.EquipementService;
+import java.util.List;
 
 /**
  *
@@ -21,19 +22,41 @@ public class EquipementServiceImpl implements EquipementService {
     @Autowired
     private EquipementDao equipementDao;
 
-    public int create(Equipement equipement) {
-        Equipement e = findByReference(equipement.getReference());
-        if (e != null) {
+    @Override
+    public int createEquipement(List<Equipement> equipements) {
+        for (Equipement equi : equipements) {
+            Equipement equipement = equipementDao.findByName(equi.getName());
+            if (equipement == null) {
+                equipementDao.save(equi);
+            }
+        }
+        return 1;
+
+    }
+
+    @Override
+    public int editEquipement(Equipement newEquipement) {
+        Equipement checkEquipement = equipementDao.getOne(newEquipement.getId());
+        if (checkEquipement == null) {
             return -1;
         } else {
-            equipementDao.save(e);
+            checkEquipement.setName(newEquipement.getName());
+            checkEquipement.setType(newEquipement.getType());
+            equipementDao.save(checkEquipement);
             return 1;
         }
     }
 
     @Override
-    public Equipement findByReference(String reference) {
-        return equipementDao.findByReference(reference);
+    public int deleteEquipement(Long id) {
+        Equipement checkEquipement = equipementDao.getOne(id);
+        if (checkEquipement == null) {
+            return -1;
+
+        } else {
+            equipementDao.delete(checkEquipement);
+            return 1;
+        }
     }
 
     public EquipementDao getEquipementDao() {

@@ -16,5 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipementDao extends JpaRepository<Equipement, Long> {
 
-    public Equipement findByReference(String reference);
+    public Equipement findByName(String name);
 }

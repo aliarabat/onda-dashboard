@@ -13,7 +13,8 @@ public class InterventionMonth {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LocalDate dateIntervention;
-    private LocalTime expectedBreakPeriodMaintenance;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Timing expectedBreakPeriodMaintenance;
     @OneToMany
     private List<InterventionDay> interventionPartDays;
 
@@ -41,13 +42,14 @@ public class InterventionMonth {
         this.interventionPartDays = interventionPartDays;
     }
 
-    public LocalTime getExpectedBreakPeriodMaintenance() {
+    public Timing getExpectedBreakPeriodMaintenance() {
         return expectedBreakPeriodMaintenance;
     }
 
-    public void setExpectedBreakPeriodMaintenance(LocalTime expectedBreakPeriodMaintenance) {
+    public void setExpectedBreakPeriodMaintenance(Timing expectedBreakPeriodMaintenance) {
         this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
     }
+
 
     @Override
     public int hashCode() {
@@ -72,6 +74,5 @@ public class InterventionMonth {
         }
         return true;
     }
-
 
 }
