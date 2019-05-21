@@ -14,7 +14,9 @@ import java.util.List;
  */
 public interface InterventionDayService {
 
-    public int createInterventionDay(String name, List<InterventionDay> InterventionDays);
+    public int createInterventionDay( List<InterventionDay> InterventionDays);
 
     public InterventionDay save(InterventionDay interventionDay);
+    
+    public List<InterventionDay> findAll();
 }

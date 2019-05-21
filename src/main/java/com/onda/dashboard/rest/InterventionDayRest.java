@@ -39,15 +39,20 @@ public class InterventionDayRest {
     @Autowired
     private InterventionDayConverter interventionDayConverter;
 
-    @PostMapping("/equipement/{name}/")
-    public int createInterventionDay(@PathVariable String name, @RequestBody List<InterventionDayVo> InterventionDaysVo) {
+    @PostMapping("/")
+    public int createInterventionDay(@RequestBody List<InterventionDayVo> InterventionDaysVo) {
         List<InterventionDay> InterventionDays = interventionDayConverter.toItem(InterventionDaysVo);
-        return interventionDayService.createInterventionDay(name, InterventionDays);
+        return interventionDayService.createInterventionDay(InterventionDays);
     }
 
     @GetMapping("/{name}")
     public EquipementVo findByEquipementName(@PathVariable String name) {
         return new EquipementConverter().toVo(interventionMonthService.findByEquipementName(name));
+    }
+
+    @GetMapping("/")
+    public List<InterventionDayVo> findAll() {
+        return interventionDayConverter.toVo(interventionDayService.findAll());
     }
 
     public InterventionDayConverter getInterventionDayConverter() {
