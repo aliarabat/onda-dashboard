@@ -32,7 +32,7 @@ public class InterventionMonthConverter extends AbstractConverter<InterventionMo
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
             try {
-                interventionMonth.setDateIntervention(formatter.parse(vo.getDateIntervention()));
+                interventionMonth.setInterventionDate(formatter.parse(vo.getDateIntervention()));
             } catch (ParseException ex) {
                 Logger.getLogger(InterventionMonthConverter.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -49,7 +49,7 @@ public class InterventionMonthConverter extends AbstractConverter<InterventionMo
             InterventionMonthVo interventionMonthVo = new InterventionMonthVo();
             interventionMonthVo.setId(item.getId());
             interventionMonthVo.setEquipementVo(new EquipementConverter().toVo(item.getEquipement()));
-            interventionMonthVo.setDateIntervention(DateUtil.toString(DateUtil.fromDate(item.getDateIntervention())));
+            interventionMonthVo.setDateIntervention(DateUtil.toString(DateUtil.fromDate(item.getInterventionDate())));
             interventionMonthVo.setInterventionPartDaysVo(new InterventionDayConverter().toVo(item.getInterventionDays()));
             return interventionMonthVo;
         }

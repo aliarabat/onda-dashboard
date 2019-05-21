@@ -9,15 +9,19 @@ package com.onda.dashboard.service.impl;
 import com.onda.dashboard.model.InterventionDay;
 import com.onda.dashboard.dao.InterventionDayDao;
 import com.onda.dashboard.model.Equipement;
+import com.onda.dashboard.model.Timing;
+import com.onda.dashboard.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.onda.dashboard.service.InterventionDayService;
 import com.onda.dashboard.service.InterventionMonthService;
 import com.onda.dashboard.service.EquipementService;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- *
  * @author hp
  */
 @Service
@@ -31,9 +35,16 @@ public class InterventionDayServiceImpl implements InterventionDayService {
     private EquipementService equipementService;
 
     @Override
-    public int createInterventionDay(String name, List<InterventionDay> InterventionDays) {
-
+    public int createInterventionDay(String name, List<InterventionDay> interventionDays) {
         Equipement equipement = equipementService.findByName(name);
+        if (equipement == null) {
+            return -1;
+        } else if (interventionDays == null || interventionDays.isEmpty()) {
+            return -2;
+        } else {
+            interventionMonthService.createInterventionMonth(equipement, interventionDays);
+            return 1;
+        }
         /*for (InterventionDay interventionDay : InterventionDays) {
             interventionDay.setAnomaly(interventionDay.getAnomaly());
             interventionDay.setCallIntervention(interventionDay.getCallIntervention());
@@ -56,13 +67,32 @@ public class InterventionDayServiceImpl implements InterventionDayService {
             //interventionDayDao.save(interventionDay);
 
         }interventionMonthService.createInterventionMonth(name, InterventionDays);*/
-
-        return 1;
     }
 
     @Override
     public InterventionDay save(InterventionDay interventionDay) {
         return interventionDayDao.save(interventionDay);
+    }
+
+    @Override
+    public InterventionDay setInterventionDayInfos(InterventionDay interventionDay) {
+        //retrieve date attrs
+        LocalDateTime callIntervention = DateUtil.convertToLocalDateTime(interventionDay.getCallIntervention());
+        LocalDateTime startIntervention = DateUtil.convertToLocalDateTime(interventionDay.getInterventionStart());
+        LocalDateTime endIntervention = DateUtil.convertToLocalDateTime(interventionDay.getInterventionEnd());
+        Duration reparationPeriod = Duration.between(callIntervention, startIntervention);
+        Duration breakPeriod = Duration.between(callIntervention, endIntervention);
+        //set durations info
+        interventionDay.setReparationDuration(ReparationAndBreakManipulations(reparationPeriod));
+        interventionDay.setBreakDuration(ReparationAndBreakManipulations(breakPeriod));
+
+        return save(interventionDay);
+    }
+
+    private Timing ReparationAndBreakManipulations(Duration period) {
+        long hoursReparationDuration = period.toHours();
+        long minutesReparationDuration = Long.parseLong((period.toMinutes()) % 60 + "");
+        return new Timing((int) hoursReparationDuration, (int) minutesReparationDuration);
     }
 
     public InterventionMonthService getInterventionMonthService() {

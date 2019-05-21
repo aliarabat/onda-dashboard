@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface InterventionMonthService {
 
-    public int createInterventionMonth(String name, List<InterventionDay> InterventionDays);
+    public void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
 
     public Equipement findByEquipementName(String name);
 

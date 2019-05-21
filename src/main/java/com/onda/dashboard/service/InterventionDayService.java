@@ -6,15 +6,17 @@
 package com.onda.dashboard.service;
 
 import com.onda.dashboard.model.InterventionDay;
+
 import java.util.List;
 
 /**
- *
  * @author hp
  */
 public interface InterventionDayService {
 
-    public int createInterventionDay(String name, List<InterventionDay> InterventionDays);
+    int createInterventionDay(String name, List<InterventionDay> InterventionDays);
 
-    public InterventionDay save(InterventionDay interventionDay);
+    InterventionDay save(InterventionDay interventionDay);
+
+    InterventionDay setInterventionDayInfos(InterventionDay interventionDay);
 }
