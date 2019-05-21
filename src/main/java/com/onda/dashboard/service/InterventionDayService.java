@@ -5,10 +5,17 @@
  */
 package com.onda.dashboard.service;
 
+import com.onda.dashboard.bean.Equipement;
+import com.onda.dashboard.bean.InterventionDay;
+import java.util.List;
+
 /**
  *
  * @author hp
  */
 public interface InterventionDayService {
     
+ public int createInterventionDay(String  name , List<InterventionDay> InterventionDays);
+ 
+ public InterventionDay save (InterventionDay interventionDay);
 }

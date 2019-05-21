@@ -1,12 +1,17 @@
 package com.onda.dashboard.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import org.exolab.castor.types.DateTime;
 
 @Entity
 public class InterventionDay {
@@ -14,14 +19,17 @@ public class InterventionDay {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToOne
-    private Equipement equipement;
     private String anomaly;
-    private LocalDateTime interventionStart;
-    private LocalDateTime interventionEnd;
-    private LocalDateTime callIntervention;
-    private Duration breakDuration;
-    private Duration reparationDuration;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date interventionStart;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date interventionEnd;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date callIntervention;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Timing breakDuration;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Timing reparationDuration;
     private Integer breakNumber;
     private String actions;
 
@@ -41,51 +49,45 @@ public class InterventionDay {
         this.anomaly = anomaly;
     }
 
-    public LocalDateTime getInterventionStart() {
+    public Date getInterventionStart() {
         return interventionStart;
     }
 
-    public Equipement getEquipement() {
-        return equipement;
-    }
-
-    public void setEquipement(Equipement equipement) {
-        this.equipement = equipement;
-    }
-
-    public void setInterventionStart(LocalDateTime interventionStart) {
+    public void setInterventionStart(Date interventionStart) {
         this.interventionStart = interventionStart;
     }
 
-    public LocalDateTime getInterventionEnd() {
+    public Date getInterventionEnd() {
         return interventionEnd;
     }
 
-    public void setInterventionEnd(LocalDateTime interventionEnd) {
+    public void setInterventionEnd(Date interventionEnd) {
         this.interventionEnd = interventionEnd;
     }
 
-    public LocalDateTime getCallIntervention() {
+    public Date getCallIntervention() {
         return callIntervention;
     }
 
-    public void setCallIntervention(LocalDateTime callIntervention) {
+    public void setCallIntervention(Date callIntervention) {
         this.callIntervention = callIntervention;
     }
 
-    public Duration getBreakDuration() {
+ 
+
+    public Timing getBreakDuration() {
         return breakDuration;
     }
 
-    public void setBreakDuration(Duration breakDuration) {
+    public void setBreakDuration(Timing breakDuration) {
         this.breakDuration = breakDuration;
     }
 
-    public Duration getReparationDuration() {
+    public Timing getReparationDuration() {
         return reparationDuration;
     }
 
-    public void setReparationDuration(Duration reparationDuration) {
+    public void setReparationDuration(Timing reparationDuration) {
         this.reparationDuration = reparationDuration;
     }
 

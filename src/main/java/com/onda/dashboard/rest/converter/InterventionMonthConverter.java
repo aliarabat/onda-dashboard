@@ -8,8 +8,12 @@ package com.onda.dashboard.rest.converter;
 import com.onda.dashboard.bean.InterventionMonth;
 import com.onda.dashboard.common.util.DateUtil;
 import com.onda.dashboard.rest.vo.InterventionMonthVo;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,27 +30,29 @@ public class InterventionMonthConverter extends AbstractConverter<InterventionMo
         } else {
             InterventionMonth interventionMonth = new InterventionMonth();
             interventionMonth.setId(vo.getId());
-            interventionMonth.setExpectedBreakPeriodMaintenance(new TimingConverter().toItem(vo.getExpectedBreakPeriodMaintenance()));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd ");
+            interventionMonth.setEquipement(new EquipementConverter().toItem(vo.getEquipementVo()));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-            interventionMonth.setDateIntervention(LocalDate.parse(vo.getDateIntervention(), formatter));
-            interventionMonth.setInterventionPartDays(new InterventionDayConverter().toItem(vo.getInterventionPartDaysVo())); 
-            interventionMonth.setExpectedBreakPeriodMaintenance(new TimingConverter().toItem(vo.getExpectedBreakPeriodMaintenance()));
+            try {
+                interventionMonth.setDateIntervention(formatter.parse(vo.getDateIntervention()));
+            } catch (ParseException ex) {
+                Logger.getLogger(InterventionMonthConverter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            interventionMonth.setInterventionPartDays(new InterventionDayConverter().toItem(vo.getInterventionPartDaysVo()));
             return interventionMonth;
         }
     }
 
     @Override
     public InterventionMonthVo toVo(InterventionMonth item) {
-           if (item == null) {
+        if (item == null) {
             return null;
         } else {
             InterventionMonthVo interventionMonthVo = new InterventionMonthVo();
             interventionMonthVo.setId(item.getId());
-            interventionMonthVo.setExpectedBreakPeriodMaintenance(new TimingConverter().toVo(item.getExpectedBreakPeriodMaintenance()));
-            interventionMonthVo.setDateIntervention(DateUtil.toString(item.getDateIntervention()));
-            interventionMonthVo.setInterventionPartDaysVo(new InterventionDayConverter().toVo(item.getInterventionPartDays())); 
-            interventionMonthVo.setExpectedBreakPeriodMaintenance(new TimingConverter().toVo(item.getExpectedBreakPeriodMaintenance()));
+            interventionMonthVo.setEquipementVo(new EquipementConverter().toVo(item.getEquipement()));
+            interventionMonthVo.setDateIntervention(DateUtil.toString(DateUtil.fromDate(item.getDateIntervention())));
+            interventionMonthVo.setInterventionPartDaysVo(new InterventionDayConverter().toVo(item.getInterventionPartDays()));
             return interventionMonthVo;
         }
     }

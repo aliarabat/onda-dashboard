@@ -9,6 +9,7 @@ import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
+import org.exolab.castor.types.DateTime;
 
 /**
  *
@@ -16,13 +17,17 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    public static String toString(LocalDateTime ldt) {
-        if (ldt == null) {
+    public static String toString(Date dt) {
+        if (dt == null) {
             return null;
         } else {
-            return ldt.toString();
+            return dt.toString();
         }
     }
+
+public static LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+    return LocalDateTime.of(fromDate(dateToConvert), LocalTime.of(dateToConvert.getHours(), dateToConvert.getMinutes(), dateToConvert.getSeconds()));
+}
 
     public static LocalTime fromString(String string) {
         if (string == null || string.equals("")) {
@@ -68,7 +73,7 @@ public class DateUtil {
 
     }
 
-      public static String toString(LocalDate ld) {
+    public static String toString(LocalDate ld) {
         if (ld == null) {
             return null;
         } else {
@@ -76,6 +81,7 @@ public class DateUtil {
         }
 
     }
+
     public static LocalDate fromStringToLocalDate(String date) {
         if (date == null || date.equals("")) {
             return null;

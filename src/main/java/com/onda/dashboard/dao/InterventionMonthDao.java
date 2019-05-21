@@ -5,7 +5,9 @@
  */
 package com.onda.dashboard.dao;
 
+import com.onda.dashboard.bean.Equipement;
 import com.onda.dashboard.bean.InterventionMonth;
+import java.util.Date;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InterventionMonthDao extends JpaRepository<InterventionMonth, Long> {
 
+    public Equipement findByEquipementName(String name);
+    public InterventionMonth findByDateIntervention(Date dateIntervention);
 }

@@ -5,10 +5,22 @@
  */
 package com.onda.dashboard.service;
 
+import com.onda.dashboard.bean.Equipement;
+import com.onda.dashboard.bean.InterventionDay;
+import com.onda.dashboard.bean.InterventionMonth;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author hp
  */
 public interface InterventionMonthService {
+
+    public int createInterventionMonth(String name, List<InterventionDay> InterventionDays);
+
+    public Equipement findByEquipementName(String name);
+
+    public InterventionMonth findByDateIntervention(Date dateIntervention);
     
 }

@@ -1,9 +1,12 @@
 package com.onda.dashboard.bean;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * @author Ali
@@ -15,7 +18,10 @@ public class Equipement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String type;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Timing expectedBreakPeriodMaintenance;
+    @ManyToOne
+    private Type typee;
 
     public Long getId() {
         return id;
@@ -29,17 +35,26 @@ public class Equipement {
         return name;
     }
 
+    public Type getTypee() {
+        return typee;
+    }
+
+    public void setTypee(Type typee) {
+        this.typee = typee;
+    }
+    
+    public Timing getExpectedBreakPeriodMaintenance() {
+        return expectedBreakPeriodMaintenance;
+    }
+
+    public void setExpectedBreakPeriodMaintenance(Timing expectedBreakPeriodMaintenance) {
+        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     @Override
     public int hashCode() {

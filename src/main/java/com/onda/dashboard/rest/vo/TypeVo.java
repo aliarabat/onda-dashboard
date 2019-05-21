@@ -9,12 +9,11 @@ package com.onda.dashboard.rest.vo;
  *
  * @author AMINE
  */
-public class EquipementVo {
+public class TypeVo {
 
     private Long id;
     private String name;
-    private TimingVo expectedBreakPeriodMaintenance;
-    private TypeVo typeVo;
+    private String reference;
 
     public Long getId() {
         return id;
@@ -22,22 +21,6 @@ public class EquipementVo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public TimingVo getExpectedBreakPeriodMaintenance() {
-        return expectedBreakPeriodMaintenance;
-    }
-
-    public TypeVo getTypeVo() {
-        return typeVo;
-    }
-
-    public void setTypeVo(TypeVo typeVo) {
-        this.typeVo = typeVo;
-    }
-
-    public void setExpectedBreakPeriodMaintenance(TimingVo expectedBreakPeriodMaintenance) {
-        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
     }
 
     public String getName() {
@@ -48,6 +31,12 @@ public class EquipementVo {
         this.name = name;
     }
 
-   
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
 
 }

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,9 +13,10 @@ public class InterventionMonth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private LocalDate dateIntervention;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Timing expectedBreakPeriodMaintenance;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateIntervention;
+    @OneToOne
+    private  Equipement equipement;
     @OneToMany
     private List<InterventionDay> interventionPartDays;
 
@@ -26,13 +28,25 @@ public class InterventionMonth {
         this.id = id;
     }
 
-    public LocalDate getDateIntervention() {
+    public Equipement getEquipement() {
+        return equipement;
+    }
+
+    public void setEquipement(Equipement equipement) {
+        this.equipement = equipement;
+    }
+
+  
+
+    public Date getDateIntervention() {
         return dateIntervention;
     }
 
-    public void setDateIntervention(LocalDate dateIntervention) {
+    public void setDateIntervention(Date dateIntervention) {
         this.dateIntervention = dateIntervention;
     }
+
+ 
 
     public List<InterventionDay> getInterventionPartDays() {
         return interventionPartDays;
@@ -40,14 +54,6 @@ public class InterventionMonth {
 
     public void setInterventionPartDays(List<InterventionDay> interventionPartDays) {
         this.interventionPartDays = interventionPartDays;
-    }
-
-    public Timing getExpectedBreakPeriodMaintenance() {
-        return expectedBreakPeriodMaintenance;
-    }
-
-    public void setExpectedBreakPeriodMaintenance(Timing expectedBreakPeriodMaintenance) {
-        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
     }
 
 

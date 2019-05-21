@@ -16,13 +16,12 @@ import java.time.LocalDateTime;
 public class InterventionDayVo {
 
     private Long id;
-    private EquipementVo equipementVo;
     private String anomaly;
     private String interventionStart;
     private String interventionEnd;
     private String callIntervention;
-    private String breakDuration;
-    private String reparationDuration;
+    private TimingVo breakDuration;
+    private TimingVo reparationDuration;
     private String breakNumber;
     private String actions;
 
@@ -32,14 +31,6 @@ public class InterventionDayVo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public EquipementVo getEquipementVo() {
-        return equipementVo;
-    }
-
-    public void setEquipementVo(EquipementVo equipementVo) {
-        this.equipementVo = equipementVo;
     }
 
     public String getAnomaly() {
@@ -74,21 +65,23 @@ public class InterventionDayVo {
         this.callIntervention = callIntervention;
     }
 
-    public String getBreakDuration() {
+    public TimingVo getBreakDuration() {
         return breakDuration;
     }
 
-    public void setBreakDuration(String breakDuration) {
+    public void setBreakDuration(TimingVo breakDuration) {
         this.breakDuration = breakDuration;
     }
 
-    public String getReparationDuration() {
+    public TimingVo getReparationDuration() {
         return reparationDuration;
     }
 
-    public void setReparationDuration(String reparationDuration) {
+    public void setReparationDuration(TimingVo reparationDuration) {
         this.reparationDuration = reparationDuration;
     }
+
+
 
     public String getBreakNumber() {
         return breakNumber;

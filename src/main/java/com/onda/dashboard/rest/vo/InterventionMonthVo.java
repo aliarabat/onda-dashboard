@@ -5,10 +5,9 @@
  */
 package com.onda.dashboard.rest.vo;
 
+import com.onda.dashboard.bean.Equipement;
 import java.time.LocalDate;
 import java.util.List;
-
-
 
 /**
  *
@@ -18,7 +17,7 @@ public class InterventionMonthVo {
 
     private Long id;
     private String dateIntervention;
-    private TimingVo expectedBreakPeriodMaintenance;
+    private EquipementVo equipementVo;
     private List<InterventionDayVo> interventionPartDaysVo;
 
     public Long getId() {
@@ -29,6 +28,14 @@ public class InterventionMonthVo {
         this.id = id;
     }
 
+    public EquipementVo getEquipementVo() {
+        return equipementVo;
+    }
+
+    public void setEquipementVo(EquipementVo equipementVo) {
+        this.equipementVo = equipementVo;
+    }
+
     public String getDateIntervention() {
         return dateIntervention;
     }
@@ -37,15 +44,6 @@ public class InterventionMonthVo {
         this.dateIntervention = dateIntervention;
     }
 
-   
-
-    public TimingVo getExpectedBreakPeriodMaintenance() {
-        return expectedBreakPeriodMaintenance;
-    }
-
-    public void setExpectedBreakPeriodMaintenance(TimingVo expectedBreakPeriodMaintenance) {
-        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
-    }
 
     public List<InterventionDayVo> getInterventionPartDaysVo() {
         return interventionPartDaysVo;
@@ -54,6 +52,5 @@ public class InterventionMonthVo {
     public void setInterventionPartDaysVo(List<InterventionDayVo> interventionPartDaysVo) {
         this.interventionPartDaysVo = interventionPartDaysVo;
     }
-    
-    
+
 }

@@ -40,8 +40,6 @@ public class EquipementServiceImpl implements EquipementService {
         if (checkEquipement == null) {
             return -1;
         } else {
-            checkEquipement.setName(newEquipement.getName());
-            checkEquipement.setType(newEquipement.getType());
             equipementDao.save(checkEquipement);
             return 1;
         }
@@ -59,6 +57,10 @@ public class EquipementServiceImpl implements EquipementService {
         }
     }
 
+       @Override
+    public Equipement findByName(String name) {
+        return  equipementDao.findByName(name);
+    }
     public EquipementDao getEquipementDao() {
         return equipementDao;
     }
@@ -66,5 +68,7 @@ public class EquipementServiceImpl implements EquipementService {
     public void setEquipementDao(EquipementDao equipementDao) {
         this.equipementDao = equipementDao;
     }
+
+ 
 
 }

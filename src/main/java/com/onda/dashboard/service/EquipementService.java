@@ -19,4 +19,6 @@ public interface EquipementService {
     public int editEquipement(Equipement newEquipement);
     
     public int deleteEquipement(Long id);
+    
+    public Equipement findByName(String name);
 }

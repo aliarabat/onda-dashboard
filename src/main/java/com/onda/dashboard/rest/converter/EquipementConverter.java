@@ -6,10 +6,7 @@
 package com.onda.dashboard.rest.converter;
 
 import com.onda.dashboard.bean.Equipement;
-import com.onda.dashboard.bean.Timing;
-import com.onda.dashboard.common.util.NumberUtil;
 import com.onda.dashboard.rest.vo.EquipementVo;
-import com.onda.dashboard.rest.vo.TimingVo;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,8 +23,9 @@ public class EquipementConverter extends AbstractConverter<Equipement, Equipemen
         } else {
             Equipement equipement = new Equipement();
             equipement.setId(vo.getId());
+            equipement.setExpectedBreakPeriodMaintenance(new TimingConverter().toItem(vo.getExpectedBreakPeriodMaintenance()));
             equipement.setName(vo.getName());
-            equipement.setType(vo.getType());
+            equipement.setTypee(new TypeConverter().toItem(vo.getTypeVo()));
             return equipement;
         }
     }
@@ -39,8 +37,9 @@ public class EquipementConverter extends AbstractConverter<Equipement, Equipemen
         } else {
             EquipementVo equipementVo = new EquipementVo();
             equipementVo.setId(item.getId());
+            equipementVo.setExpectedBreakPeriodMaintenance(new TimingConverter().toVo(item.getExpectedBreakPeriodMaintenance()));
             equipementVo.setName(item.getName());
-            equipementVo.setType(item.getType());
+            equipementVo.setTypeVo(new TypeConverter().toVo(item.getTypee()));
             return equipementVo;
         }
     }
