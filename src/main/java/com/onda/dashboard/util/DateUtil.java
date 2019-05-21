@@ -16,12 +16,16 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    public static String toString(LocalTime lt) {
-        if (lt == null) {
+    public static String toString(Date dt) {
+        if (dt == null) {
             return null;
         } else {
-            return lt.toString();
+            return dt.toString();
         }
+    }
+
+    public static LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return LocalDateTime.of(fromDate(dateToConvert), LocalTime.of(dateToConvert.getHours(), dateToConvert.getMinutes(), dateToConvert.getSeconds()));
     }
 
     public static LocalTime fromString(String string) {
@@ -59,13 +63,22 @@ public class DateUtil {
         }
     }
 
-    public static String toString(LocalDate localDate) {
-        if (localDate == null) {
+    public static String toString(Duration d) {
+        if (d == null) {
             return null;
         } else {
-return localDate.toString();
+            return d.toString();
         }
-        
+
+    }
+
+    public static String toString(LocalDate ld) {
+        if (ld == null) {
+            return null;
+        } else {
+            return ld.toString();
+        }
+
     }
 
     public static LocalDate fromStringToLocalDate(String date) {
@@ -82,27 +95,19 @@ return localDate.toString();
         return d2;
     }
 
-    public static LocalDate getFirstDayOfWeek(){
+    public static LocalDate getFirstDayOfWeek() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
         System.out.println(cal.getTime());
         return DateUtil.fromDate(cal.getTime());
     }
-    /*
-    public static Date getFirstDayOfMonth(){
-        LocalDate localDate=LocalDate.of(getFirstDayOfWeek().getYear(), getFirstDayOfWeek().getMonth(),1);
+
+    public static Date getFirstDayOfMonth() {
+        LocalDate localDate = LocalDate.of(getFirstDayOfWeek().getYear(), getFirstDayOfWeek().getMonth(), 1);
         return toDate(localDate);
-    }*/
-
-    //for tests
-
-    public static LocalDate getFirstDayOfMonth(){
-        LocalDate localDate=LocalDate.of(getFirstDayOfWeek().getYear(), Month.APRIL,1);
-        return localDate;
     }
 
-
-    public static int lenghtOfMonth(LocalDate date){
+    public static int lenghtOfMonth(LocalDate date) {
         return date.lengthOfMonth();
     }
 }

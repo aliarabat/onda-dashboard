@@ -29,6 +29,9 @@ public class Type implements Serializable {
         this.name = name;
     }
 
+    public Type() {
+    }
+
     public Long getId() {
         return id;
     }

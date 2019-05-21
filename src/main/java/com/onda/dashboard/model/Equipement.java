@@ -1,6 +1,7 @@
 package com.onda.dashboard.model;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +19,17 @@ public class Equipement implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Timing expectedBreakPeriodMaintenance;
     @OneToOne
     private Type type;
 
     public Equipement(String name, Type type) {
         this.name = name;
         this.type = type;
+    }
+
+    public Equipement() {
     }
 
     public Long getId() {
@@ -40,6 +46,14 @@ public class Equipement implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Timing getExpectedBreakPeriodMaintenance() {
+        return expectedBreakPeriodMaintenance;
+    }
+
+    public void setExpectedBreakPeriodMaintenance(Timing expectedBreakPeriodMaintenance) {
+        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
     }
 
     public Type getType() {

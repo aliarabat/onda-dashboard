@@ -17,4 +17,5 @@ import com.onda.dashboard.model.Equipement;
 @Repository
 public interface EquipementDao extends JpaRepository<Equipement, Long> {
 
+    public Equipement findByName(String name);
 }

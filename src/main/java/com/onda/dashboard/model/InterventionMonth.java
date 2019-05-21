@@ -41,6 +41,9 @@ public class InterventionMonth implements Serializable {
         this.equipement = equipement;
     }
 
+    public InterventionMonth() {
+    }
+
     public Equipement getEquipement() {
         return equipement;
     }

@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.onda.dashboard.service;
+package com.onda.dashboard.util;
 
 /**
  *
- * @author hp
+ * @author Xrio
  */
-public interface InterventionService {
+public class ObjectUtil {
+    
+    public static boolean isNull(Object object){
+        return object == null; 
+    }
     
 }

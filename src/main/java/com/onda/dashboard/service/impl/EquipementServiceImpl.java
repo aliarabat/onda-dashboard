@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import com.onda.dashboard.dao.EquipementDao;
 import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionMonth;
-import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.model.Type;
 import com.onda.dashboard.service.EquipementService;
 import com.onda.dashboard.util.JasperUtil;
@@ -30,6 +28,7 @@ import java.util.Arrays;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import java.util.List;
 
 /**
  *
@@ -40,6 +39,46 @@ public class EquipementServiceImpl implements EquipementService {
 
     @Autowired
     private EquipementDao equipementDao;
+
+    @Override
+    public int createEquipement(List<Equipement> equipements) {
+        for (Equipement equi : equipements) {
+            Equipement equipement = equipementDao.findByName(equi.getName());
+            if (equipement == null) {
+                equipementDao.save(equi);
+            }
+        }
+        return 1;
+
+    }
+
+    @Override
+    public int editEquipement(Equipement newEquipement) {
+        Equipement checkEquipement = equipementDao.getOne(newEquipement.getId());
+        if (checkEquipement == null) {
+            return -1;
+        } else {
+            equipementDao.save(checkEquipement);
+            return 1;
+        }
+    }
+
+    @Override
+    public int deleteEquipement(Long id) {
+        Equipement checkEquipement = equipementDao.getOne(id);
+        if (checkEquipement == null) {
+            return -1;
+
+        } else {
+            equipementDao.delete(checkEquipement);
+            return 1;
+        }
+    }
+
+    @Override
+    public Equipement findByName(String name) {
+        return equipementDao.findByName(name);
+    }
 
     public EquipementDao getEquipementDao() {
         return equipementDao;
@@ -58,7 +97,7 @@ public class EquipementServiceImpl implements EquipementService {
         list.add(new InterventionMonth(new Equipement("equipe 1", new Type("type1"))));
         list.add(new InterventionMonth(new Equipement("equipe 2", new Type("type1"))));
         list.add(new InterventionMonth(new Equipement("equipe 3", new Type("type1"))));
-        
+
         response.setContentType("application/pdf");
         response.addHeader("Content-Disposition", "attachement; filename=\"dashboard.pdf" + "\"");
         OutputStream out = null;
