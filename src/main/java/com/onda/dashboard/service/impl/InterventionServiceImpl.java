@@ -5,7 +5,7 @@
  */
 package com.onda.dashboard.service.impl;
 
-import com.onda.dashboard.dao.InterventionDao;
+import com.onda.dashboard.dao.InterventionMonthDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.onda.dashboard.service.InterventionService;
 
@@ -16,14 +16,14 @@ import com.onda.dashboard.service.InterventionService;
 public class InterventionServiceImpl implements InterventionService {
 
     @Autowired
-    private InterventionDao interventionDao;
+    private InterventionMonthDao interventionMonthDao;
 
-    public InterventionDao getInterventionDao() {
-        return interventionDao;
+    public InterventionMonthDao getInterventionMonthDao() {
+        return interventionMonthDao;
     }
 
-    public void setInterventionDao(InterventionDao interventionDao) {
-        this.interventionDao = interventionDao;
+    public void setInterventionMonthDao(InterventionMonthDao interventionMonthDao) {
+        this.interventionMonthDao = interventionMonthDao;
     }
 
 }

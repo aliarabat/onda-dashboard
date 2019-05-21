@@ -5,9 +5,10 @@
  */
 package com.onda.dashboard.dao;
 
-import com.onda.dashboard.bean.Equipement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.onda.dashboard.model.Equipement;
 
 /**
  *
@@ -16,5 +17,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipementDao extends JpaRepository<Equipement, Long> {
 
-    public Equipement findByReference(String reference);
 }

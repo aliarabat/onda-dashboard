@@ -5,7 +5,7 @@
  */
 package com.onda.dashboard.service;
 
-import com.onda.dashboard.bean.Equipement;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -13,8 +13,7 @@ import com.onda.dashboard.bean.Equipement;
  */
 public interface EquipementService {
 
-    public Equipement findByReference(String reference);
+    void printDoc(HttpServletResponse response);
 
-    public int create(Equipement equipement);
-
+    void printGraph(HttpServletResponse response);
 }

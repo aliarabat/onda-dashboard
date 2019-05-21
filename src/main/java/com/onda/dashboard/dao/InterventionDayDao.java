@@ -5,9 +5,10 @@
  */
 package com.onda.dashboard.dao;
 
-import com.onda.dashboard.bean.InterventionDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.onda.dashboard.model.InterventionDay;
 
 /**
  *
