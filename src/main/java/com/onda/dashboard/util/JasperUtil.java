@@ -15,6 +15,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.onda.dashboard.model.InterventionMonth;
+import com.onda.dashboard.rest.vo.InterventionMonthVo;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -59,7 +60,7 @@ public class JasperUtil {
 //        }
 //
 //    }
-    public JasperPrint generatePdf(List<InterventionMonth> list, Map<String, Object> params, String cheminJapser)
+    public JasperPrint generatePdf(List<InterventionMonthVo> list, Map<String, Object> params, String cheminJapser)
             throws FileNotFoundException, JRException, IOException {
 
         InputStream reportSource = new FileInputStream(cheminJapser);
@@ -71,7 +72,7 @@ public class JasperUtil {
 
     }
 
-    public JasperPrint generateDoc(List<InterventionMonth> list, Map<String, Object> params, String jasperFile,
+    public JasperPrint generateDoc(List<InterventionMonthVo> list, Map<String, Object> params, String jasperFile,
             String type) throws FileNotFoundException, JRException, IOException {
         JasperPrint jasperPrint = null;
         switch (type.toLowerCase()) {

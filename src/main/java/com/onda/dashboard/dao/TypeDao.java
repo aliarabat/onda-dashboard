@@ -15,5 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TypeDao extends JpaRepository<Type, Long>{
-    
+
+    Type findByName(String name);
 }

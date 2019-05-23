@@ -45,28 +45,11 @@ public class InterventionDayServiceImpl implements InterventionDayService {
             interventionMonthService.createInterventionMonth(equipement, interventionDays);
             return 1;
         }
-        /*for (InterventionDay interventionDay : InterventionDays) {
-            interventionDay.setAnomaly(interventionDay.getAnomaly());
-            interventionDay.setCallIntervention(interventionDay.getCallIntervention());
-            interventionDay.setInterventionStart(interventionDay.getInterventionStart());
-            interventionDay.setInterventionEnd(interventionDay.getInterventionEnd());
-            interventionDay.setBreakNumber(interventionDay.getBreakNumber());
-            LocalDateTime call = DateUtil.convertToLocalDateTime(interventionDay.getCallIntervention());
-            LocalDateTime start = DateUtil.convertToLocalDateTime(interventionDay.getInterventionStart());
-            LocalDateTime end = DateUtil.convertToLocalDateTime(interventionDay.getInterventionEnd());
-            Duration dRep = Duration.between(call, start);
-            Duration dBreak = Duration.between(call, end);
-            long dRepHours = dRep.toHours();
-            long dRepMinute = Long.parseLong((dRep.toMinutes()) % 60 + "");
-            Timing tRep = new Timing((int) dRepHours, (int) dRepMinute);
-            interventionDay.setReparationDuration(tRep);
-            long dBreakHours = dBreak.toHours();
-            long dBreakMinute = Long.parseLong((dBreak.toMinutes()) % 60 + "");
-            Timing tBreak = new Timing((int) dBreakHours, (int) dBreakMinute);
-            interventionDay.setBreakDuration(tBreak);
-            //interventionDayDao.save(interventionDay);
+    }
 
-        }interventionMonthService.createInterventionMonth(name, InterventionDays);*/
+    @Override
+    public int modifyInterventionDay(String name, InterventionDay interventionDay) {
+        return 0;
     }
 
     @Override
@@ -77,9 +60,9 @@ public class InterventionDayServiceImpl implements InterventionDayService {
     @Override
     public InterventionDay setInterventionDayInfos(InterventionDay interventionDay) {
         //retrieve date attrs
-        LocalDateTime callIntervention = DateUtil.convertToLocalDateTime(interventionDay.getCallIntervention());
-        LocalDateTime startIntervention = DateUtil.convertToLocalDateTime(interventionDay.getInterventionStart());
-        LocalDateTime endIntervention = DateUtil.convertToLocalDateTime(interventionDay.getInterventionEnd());
+        LocalDateTime callIntervention = interventionDay.getCallIntervention();
+        LocalDateTime startIntervention = interventionDay.getInterventionStart();
+        LocalDateTime endIntervention = interventionDay.getInterventionEnd();
         Duration reparationPeriod = Duration.between(callIntervention, startIntervention);
         Duration breakPeriod = Duration.between(callIntervention, endIntervention);
         //set durations info
@@ -89,9 +72,14 @@ public class InterventionDayServiceImpl implements InterventionDayService {
         return save(interventionDay);
     }
 
+    @Override
+    public List<InterventionDay> findAll() {
+        return interventionDayDao.findAll();
+    }
+
     private Timing ReparationAndBreakManipulations(Duration period) {
         long hoursReparationDuration = period.toHours();
-        long minutesReparationDuration = Long.parseLong((period.toMinutes()) % 60 + "");
+        long minutesReparationDuration = Long.parseLong((period.toMinutes() % 60) + "");
         return new Timing((int) hoursReparationDuration, (int) minutesReparationDuration);
     }
 

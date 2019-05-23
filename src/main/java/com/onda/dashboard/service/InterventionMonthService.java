@@ -8,19 +8,30 @@ package com.onda.dashboard.service;
 import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionDay;
 import com.onda.dashboard.model.InterventionMonth;
+import com.onda.dashboard.rest.vo.InterventionMonthVo;
+
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
- *
  * @author hp
  */
 public interface InterventionMonthService {
 
-    public void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
+    void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
 
-    public Equipement findByEquipementName(String name);
+    List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
 
-    public InterventionMonth findByDateIntervention(Date dateIntervention);
+    List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths);
+
+    InterventionMonth findByEquipementName(String name);
+
+    List<InterventionMonthVo> findAll();
     
+    void printDoc(HttpServletResponse response, int year, int month);
+    
+    void printGraph(HttpServletResponse response, int year, int month);
+
 }

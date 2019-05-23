@@ -24,9 +24,10 @@ public class Equipement implements Serializable {
     @OneToOne
     private Type type;
 
-    public Equipement(String name, Type type) {
+    public Equipement(String name, Type type, Timing expectedBreakPeriodMaintenance) {
         this.name = name;
         this.type = type;
+        this.expectedBreakPeriodMaintenance=expectedBreakPeriodMaintenance;
     }
 
     public Equipement() {

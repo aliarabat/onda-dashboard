@@ -1,6 +1,7 @@
 package com.onda.dashboard.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +19,9 @@ public class InterventionDay implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String anomaly;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date interventionStart;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date interventionEnd;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date callIntervention;
+    private LocalDateTime interventionStart;
+    private LocalDateTime interventionEnd;
+    private LocalDateTime callIntervention;
     @OneToOne(cascade = CascadeType.ALL)
     private Timing breakDuration;
     @OneToOne(cascade = CascadeType.ALL)
@@ -47,29 +45,31 @@ public class InterventionDay implements Serializable {
         this.anomaly = anomaly;
     }
 
-    public Date getInterventionStart() {
+    public LocalDateTime getInterventionStart() {
         return interventionStart;
     }
 
-    public void setInterventionStart(Date interventionStart) {
+    public void setInterventionStart(LocalDateTime interventionStart) {
         this.interventionStart = interventionStart;
     }
 
-    public Date getInterventionEnd() {
+    public LocalDateTime getInterventionEnd() {
         return interventionEnd;
     }
 
-    public void setInterventionEnd(Date interventionEnd) {
+    public void setInterventionEnd(LocalDateTime interventionEnd) {
         this.interventionEnd = interventionEnd;
     }
 
-    public Date getCallIntervention() {
+    public LocalDateTime getCallIntervention() {
         return callIntervention;
     }
 
-    public void setCallIntervention(Date callIntervention) {
+    public void setCallIntervention(LocalDateTime callIntervention) {
         this.callIntervention = callIntervention;
     }
+
+   
 
     public Timing getBreakDuration() {
         return breakDuration;

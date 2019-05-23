@@ -6,10 +6,12 @@
 package com.onda.dashboard.rest;
 
 import com.onda.dashboard.model.InterventionDay;
+import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.rest.converter.EquipementConverter;
 import com.onda.dashboard.rest.converter.InterventionDayConverter;
 import com.onda.dashboard.rest.vo.EquipementVo;
 import com.onda.dashboard.rest.vo.InterventionDayVo;
+import com.onda.dashboard.rest.vo.InterventionMonthVo;
 import com.onda.dashboard.service.InterventionDayService;
 import com.onda.dashboard.service.InterventionMonthService;
 import java.util.List;
@@ -39,15 +41,15 @@ public class InterventionDayRest {
     @Autowired
     private InterventionDayConverter interventionDayConverter;
 
-    @PostMapping("/equipement/{name}/")
+    @PostMapping("/equipement/{name}")
     public int createInterventionDay(@PathVariable String name, @RequestBody List<InterventionDayVo> InterventionDaysVo) {
         List<InterventionDay> InterventionDays = interventionDayConverter.toItem(InterventionDaysVo);
         return interventionDayService.createInterventionDay(name, InterventionDays);
     }
 
-    @GetMapping("/{name}")
-    public EquipementVo findByEquipementName(@PathVariable String name) {
-        return new EquipementConverter().toVo(interventionMonthService.findByEquipementName(name));
+    @GetMapping("/")
+    public List<InterventionDayVo> findAll() {
+        return interventionDayConverter.toVo(interventionDayService.findAll());
     }
 
     public InterventionDayConverter getInterventionDayConverter() {

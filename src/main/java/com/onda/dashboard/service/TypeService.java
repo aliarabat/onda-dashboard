@@ -5,10 +5,16 @@
  */
 package com.onda.dashboard.service;
 
+import com.onda.dashboard.model.Type;
+import com.onda.dashboard.rest.vo.TypeVo;
+
 /**
  *
  * @author AMINE
  */
 public interface TypeService {
-    
+
+    Type findByName(String name);
+
+    int createType(Type typeVo);
 }

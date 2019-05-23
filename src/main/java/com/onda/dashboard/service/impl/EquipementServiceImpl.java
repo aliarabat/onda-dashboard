@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.onda.dashboard.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +24,16 @@ import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.model.Type;
 import com.onda.dashboard.service.EquipementService;
 import com.onda.dashboard.util.JasperUtil;
+
 import java.util.Arrays;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+
 import java.util.List;
 
 /**
- *
  * @author hp
  */
 @Service
@@ -40,12 +42,17 @@ public class EquipementServiceImpl implements EquipementService {
     @Autowired
     private EquipementDao equipementDao;
 
+    @Autowired
+    private TypeService typeService;
+
     @Override
     public int createEquipement(List<Equipement> equipements) {
         for (Equipement equi : equipements) {
+            Type type = typeService.findByName(equi.getType().getName());
             Equipement equipement = equipementDao.findByName(equi.getName());
-            if (equipement == null) {
-                equipementDao.save(equi);
+            if (type != null && equipement == null) {
+                equipement = new Equipement(equi.getName(), type, equi.getExpectedBreakPeriodMaintenance());
+                equipementDao.save(equipement);
             }
         }
         return 1;
@@ -88,56 +95,12 @@ public class EquipementServiceImpl implements EquipementService {
         this.equipementDao = equipementDao;
     }
 
-    @Override
-    public void printDoc(HttpServletResponse response) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
 
-        List<InterventionMonth> list = new ArrayList();
-        list.add(new InterventionMonth(new Equipement("equipe 1", new Type("type1"))));
-        list.add(new InterventionMonth(new Equipement("equipe 2", new Type("type1"))));
-        list.add(new InterventionMonth(new Equipement("equipe 3", new Type("type1"))));
-
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachement; filename=\"dashboard.pdf" + "\"");
-        OutputStream out = null;
-
-        try {
-            out = response.getOutputStream();
-            jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
-
+    public TypeService getTypeService() {
+        return typeService;
     }
 
-    @Override
-    public void printGraph(HttpServletResponse response) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
-
-        /*List<Intervention> list = new ArrayList<>();
-        List<InterventionMonth> lst=new ArrayList();
-        lst.add(new InterventionMonth(new Equipement("equipe 1")));
-        lst.add(new InterventionMonth(new Equipement("equipe 2")));
-        lst.add(new InterventionMonth(new Equipement("equipe 3")));
-        list.add(new Intervention("type1", lst));*/
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachement; filename=\"tbf.pdf" + "\"");
-        OutputStream out = null;
-
-        try {
-            out = response.getOutputStream();
-            //jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
+    public void setTypeService(TypeService typeService) {
+        this.typeService = typeService;
     }
-
 }

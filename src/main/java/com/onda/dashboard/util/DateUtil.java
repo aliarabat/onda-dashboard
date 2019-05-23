@@ -107,6 +107,11 @@ public class DateUtil {
         return toDate(localDate);
     }
 
+    public static Date getFirstDayOfMonthByYearAndMonth(int year, int month) {
+        LocalDate localDate = LocalDate.of(year, month, 1);
+        return toDate(localDate);
+    }
+
     public static int lenghtOfMonth(LocalDate date) {
         return date.lengthOfMonth();
     }

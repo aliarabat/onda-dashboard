@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package com.onda.dashboard.rest.vo;
+
+import com.onda.dashboard.model.Timing;
+
 import java.util.List;
 
 /**
- *
  * @author AMINE
  */
 public class InterventionMonthVo {
@@ -16,6 +18,10 @@ public class InterventionMonthVo {
     private String dateIntervention;
     private EquipementVo equipementVo;
     private List<InterventionDayVo> interventionPartDaysVo;
+    private Timing functionalityTimeWanted = new Timing();
+    private Timing functionalityTimeAchieved = new Timing();
+    private Timing currentBreakPeriodMaintenance = new Timing();
+    private Double tbf;
 
     public Long getId() {
         return id;
@@ -49,4 +55,35 @@ public class InterventionMonthVo {
         this.interventionPartDaysVo = interventionPartDaysVo;
     }
 
+    public Timing getFunctionalityTimeWanted() {
+        return functionalityTimeWanted;
+    }
+
+    public void setFunctionalityTimeWanted(Timing functionalityTimeWanted) {
+        this.functionalityTimeWanted = functionalityTimeWanted;
+    }
+
+    public Timing getFunctionalityTimeAchieved() {
+        return functionalityTimeAchieved;
+    }
+
+    public void setFunctionalityTimeAchieved(Timing functionalityTimeAchieved) {
+        this.functionalityTimeAchieved = functionalityTimeAchieved;
+    }
+
+    public Timing getCurrentBreakPeriodMaintenance() {
+        return currentBreakPeriodMaintenance;
+    }
+
+    public void setCurrentBreakPeriodMaintenance(Timing currentBreakPeriodMaintenance) {
+        this.currentBreakPeriodMaintenance = currentBreakPeriodMaintenance;
+    }
+
+    public Double getTbf() {
+        return tbf;
+    }
+
+    public void setTbf(Double tbf) {
+        this.tbf = tbf;
+    }
 }
