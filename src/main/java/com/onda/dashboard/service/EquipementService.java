@@ -27,4 +27,8 @@ public interface EquipementService {
 
     public Equipement findByName(String name);
 
+    public List<Equipement> findAll();
+
+    public Equipement findById(Long id);
+
 }

@@ -22,6 +22,7 @@ import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.model.Type;
 import com.onda.dashboard.service.EquipementService;
+import com.onda.dashboard.service.TypeService;
 import com.onda.dashboard.util.JasperUtil;
 import java.util.Arrays;
 
@@ -39,14 +40,24 @@ public class EquipementServiceImpl implements EquipementService {
 
     @Autowired
     private EquipementDao equipementDao;
+    @Autowired
+    private TypeService typeService;
 
     @Override
     public int createEquipement(List<Equipement> equipements) {
+
         for (Equipement equi : equipements) {
-            Equipement equipement = equipementDao.findByName(equi.getName());
-            if (equipement == null) {
-                equipementDao.save(equi);
+            Type checkType = typeService.findByName(equi.getType().getName());
+            if (checkType == null) {
+                return -1;
+            } else {
+                Equipement equipement = equipementDao.findByName(equi.getName());
+                if (equipement == null) {
+                    equi.setType(checkType);
+                    equipementDao.save(equi);
+                }
             }
+
         }
         return 1;
 
@@ -58,8 +69,21 @@ public class EquipementServiceImpl implements EquipementService {
         if (checkEquipement == null) {
             return -1;
         } else {
-            equipementDao.save(checkEquipement);
-            return 1;
+            Type checkType = typeService.findByName(newEquipement.getType().getName());
+            if (checkType == null) {
+                return -2;
+            } else {
+                Equipement chEquipement=findByName(newEquipement.getName());
+                
+                if(chEquipement==null){
+                checkEquipement.setExpectedBreakPeriodMaintenance(newEquipement.getExpectedBreakPeriodMaintenance());
+                checkEquipement.setType(checkType);
+                checkEquipement.setName(newEquipement.getName());
+                equipementDao.save(checkEquipement);
+                return 1;
+            }
+                else return -3;
+            }
         }
     }
 
@@ -138,6 +162,24 @@ public class EquipementServiceImpl implements EquipementService {
         } catch (JRException | IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
+    }
+
+    @Override
+    public List<Equipement> findAll() {
+        return equipementDao.findAll();
+    }
+
+    @Override
+    public Equipement findById(Long id) {
+        return equipementDao.getOne(id);
+    }
+
+    public TypeService getTypeService() {
+        return typeService;
+    }
+
+    public void setTypeService(TypeService typeService) {
+        this.typeService = typeService;
     }
 
 }
