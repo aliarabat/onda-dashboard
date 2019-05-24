@@ -53,15 +53,15 @@ public class InterventionMonthRest {
 						DateUtil.toDate(LocalDate.of(year, month, 1))));
 	}
 
-	@GetMapping("/year/{year}/month/{month}/printdoc")
-	public void printDoc(HttpServletResponse response, @PathVariable int year, @PathVariable int month) {
-		interventionMonthService.printDoc(response, year, month);
-	}
-
-	@GetMapping("/year/{year}/month/{month}/printgraph")
-	public void printGraph(HttpServletResponse response, @PathVariable int year, @PathVariable int month) {
-		interventionMonthService.printGraph(response, year, month);
-	}
+//	@GetMapping("/year/{year}/month/{month}/printdoc")
+//	public void printDoc(HttpServletResponse response, @PathVariable int year, @PathVariable int month) {
+//		interventionMonthService.printDoc(response, year, month);
+//	}
+//
+//	@GetMapping("/year/{year}/month/{month}/printgraph")
+//	public void printGraph(HttpServletResponse response, @PathVariable int year, @PathVariable int month) {
+//		interventionMonthService.printGraph(response, year, month);
+//	}
 
 	public InterventionMonthService getInterventionMonthService() {
 		return interventionMonthService;

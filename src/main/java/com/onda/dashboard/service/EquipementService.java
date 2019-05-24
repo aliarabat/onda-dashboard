@@ -23,4 +23,8 @@ public interface EquipementService {
 
 	public Equipement findByName(String name);
 
+        public List<Equipement> findByTypeName(String name);
+        
+        public List<Equipement> findAll();
+
 }

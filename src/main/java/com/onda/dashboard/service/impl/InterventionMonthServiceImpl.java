@@ -31,13 +31,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.onda.dashboard.util.DateUtil;
-import com.onda.dashboard.util.JasperUtil;
 import com.onda.dashboard.util.MonthUtil;
 import com.onda.dashboard.util.NumberUtil;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,52 +132,52 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
         return interventionMonthsToPrint(interventionMonthDao.findAll());
     }
     
+//
+//    @Override
+//    public void printDoc(HttpServletResponse response, int year, int month) {
+//        JasperPrint jasperPrint = null;
+//        Map<String, Object> params = new HashMap<>();
+//
+//        List<InterventionMonth> list = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
+//        String mois=MonthUtil.getMonth(month-1);
+//        response.setContentType("application/pdf");
+//        response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord"+mois+year+".pdf" + "\"");
+//        OutputStream out = null;
+//
+//        try {
+//            out = response.getOutputStream();
+//            jasperPrint = new JasperUtil().generateDoc(interventionMonthsToPrint(list), params, "Dashboard_Detail.jasper", "pdf");
+//            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+//        } catch (FileNotFoundException e) {
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//        } catch (JRException | IOException e) {
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//        }
+//
+//    }
 
-    @Override
-    public void printDoc(HttpServletResponse response, int year, int month) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
-
-        List<InterventionMonth> list = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
-        String mois=MonthUtil.getMonth(month-1);
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord"+mois+year+".pdf" + "\"");
-        OutputStream out = null;
-
-        try {
-            out = response.getOutputStream();
-            jasperPrint = new JasperUtil().generateDoc(interventionMonthsToPrint(list), params, "Dashboard_Detail.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
-
-    }
-
-    @Override
-    public void printGraph(HttpServletResponse response, int year, int month) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
-
-        List<InterventionMonth> list = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
-        String mois=MonthUtil.getMonth(month-1);
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachement; filename=\"tbf"+mois+year+".pdf" + "\"");
-        OutputStream out = null;
-
-        try {
-            out = response.getOutputStream();
-            jasperPrint = new JasperUtil().generateDoc(interventionMonthsToPrint(list), params, "TBF_Indicateur.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
-    }
-    
+//    @Override
+//    public void printGraph(HttpServletResponse response, int year, int month) {
+//        JasperPrint jasperPrint = null;
+//        Map<String, Object> params = new HashMap<>();
+//
+//        List<InterventionMonth> list = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
+//        String mois=MonthUtil.getMonth(month-1);
+//        response.setContentType("application/pdf");
+//        response.addHeader("Content-Disposition", "attachement; filename=\"tbf"+mois+year+".pdf" + "\"");
+//        OutputStream out = null;
+//
+//        try {
+//            out = response.getOutputStream();
+//            jasperPrint = new JasperUtil().generateDoc(interventionMonthsToPrint(list), params, "TBF_Indicateur.jasper", "pdf");
+//            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+//        } catch (FileNotFoundException e) {
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//        } catch (JRException | IOException e) {
+//            System.out.println(Arrays.toString(e.getStackTrace()));
+//        }
+//    }
+//    
 
     public InterventionMonthDao getInterventionMonthDao() {
         return interventionMonthDao;

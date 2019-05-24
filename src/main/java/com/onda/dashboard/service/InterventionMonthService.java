@@ -30,8 +30,8 @@ public interface InterventionMonthService {
 
     List<InterventionMonthVo> findAll();
     
-    void printDoc(HttpServletResponse response, int year, int month);
-    
-    void printGraph(HttpServletResponse response, int year, int month);
+//    void printDoc(HttpServletResponse response, int year, int month);
+//    
+//    void printGraph(HttpServletResponse response, int year, int month);
 
 }

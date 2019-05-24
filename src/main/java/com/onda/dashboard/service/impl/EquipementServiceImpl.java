@@ -23,13 +23,8 @@ import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.model.Type;
 import com.onda.dashboard.service.EquipementService;
-import com.onda.dashboard.util.JasperUtil;
 
 import java.util.Arrays;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
 
 import java.util.List;
 
@@ -81,12 +76,21 @@ public class EquipementServiceImpl implements EquipementService {
             return 1;
         }
     }
+    
+    @Override
+    public List<Equipement> findByTypeName(String name) {
+        return equipementDao.findByTypeName(name);
+    }
 
     @Override
     public Equipement findByName(String name) {
         return equipementDao.findByName(name);
     }
 
+    @Override
+    public List<Equipement> findAll() {
+        return equipementDao.findAll();
+    }
     public EquipementDao getEquipementDao() {
         return equipementDao;
     }
@@ -95,7 +99,6 @@ public class EquipementServiceImpl implements EquipementService {
         this.equipementDao = equipementDao;
     }
 
-
     public TypeService getTypeService() {
         return typeService;
     }
@@ -103,4 +106,6 @@ public class EquipementServiceImpl implements EquipementService {
     public void setTypeService(TypeService typeService) {
         this.typeService = typeService;
     }
+
+
 }
