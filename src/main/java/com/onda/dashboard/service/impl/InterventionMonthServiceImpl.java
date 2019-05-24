@@ -9,6 +9,7 @@ import com.onda.dashboard.dao.InterventionMonthDao;
 import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionDay;
 import com.onda.dashboard.model.InterventionMonth;
+import com.onda.dashboard.model.Timing;
 import com.onda.dashboard.rest.converter.InterventionMonthConverter;
 import com.onda.dashboard.rest.vo.InterventionMonthVo;
 import com.onda.dashboard.service.InterventionDayService;
@@ -107,16 +108,20 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 			List<InterventionMonthVo> interventionMonthVos = new InterventionMonthConverter().toVo(interventionMonths);
 			interventionMonthVos.forEach(interventionMonthVo -> {
 				interventionMonthVo.getInterventionPartDaysVo().forEach(interventionDayVo -> {
-					int housMaintenance = interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour()
+					int housMaintenance = NumberUtil
+							.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour())
 							+ NumberUtil.toInt(interventionDayVo.getReparationDuration().getHour());
-					int minutesMaintenance = interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute()
+					int minutesMaintenance = NumberUtil
+							.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute())
 							+ NumberUtil.toInt(interventionDayVo.getReparationDuration().getMinute());
 					if (minutesMaintenance >= 60) {
 						++housMaintenance;
 						minutesMaintenance = minutesMaintenance - 60;
 					}
-					interventionMonthVo.getCurrentBreakPeriodMaintenance().setHour(housMaintenance);
-					interventionMonthVo.getCurrentBreakPeriodMaintenance().setMinute(minutesMaintenance);
+					interventionMonthVo.getCurrentBreakPeriodMaintenance()
+							.setHour(NumberUtil.toString(housMaintenance));
+					interventionMonthVo.getCurrentBreakPeriodMaintenance()
+							.setMinute(NumberUtil.toString(minutesMaintenance));
 				});
 				// some calculs for monthly data
 				int functionalityTimeWantedHours = DateUtil
@@ -133,10 +138,14 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 				Double periodFunctionAchieved = functionalityTimeAchievedHours
 						+ NumberUtil.toDouble("0." + (functionalityTimeAchievedMinutes * 10 / 6));
 				// set infos to the main object
-				interventionMonthVo.getFunctionalityTimeWanted().setHour(functionalityTimeWantedHours);
-				interventionMonthVo.getFunctionalityTimeWanted().setMinute(functionalityTimeWantedMinutes);
-				interventionMonthVo.getFunctionalityTimeAchieved().setHour(functionalityTimeAchievedHours);
-				interventionMonthVo.getFunctionalityTimeAchieved().setMinute(functionalityTimeAchievedMinutes);
+				interventionMonthVo.getFunctionalityTimeWanted()
+						.setHour(NumberUtil.toString(functionalityTimeWantedHours));
+				interventionMonthVo.getFunctionalityTimeWanted()
+						.setMinute(NumberUtil.toString(functionalityTimeWantedMinutes));
+				interventionMonthVo.getFunctionalityTimeAchieved()
+						.setHour(NumberUtil.toString(functionalityTimeAchievedHours));
+				interventionMonthVo.getFunctionalityTimeAchieved()
+						.setMinute(NumberUtil.toString(functionalityTimeAchievedMinutes));
 				// calculate the tbf
 				Double tbf = periodFunctionAchieved * 100 / functionalityTimeWantedHours;
 
@@ -161,9 +170,17 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 		JasperPrint jasperPrint = null;
 		Map<String, Object> params = new HashMap<>();
 
-		List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
-				DateUtil.toDate(LocalDate.of(year, month, 1))));
+		List<InterventionMonthVo> list = interventionMonthsToPrint(
+				findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
+
+		Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
+		Timing timing = new Timing(111, 22);
 		String mois = MonthUtil.getMonth(month - 1);
+		// params.put("functionalityTimeWanted", 11111);
+		calculateTotalTbf(list, params);
+		params.put("average", NumberUtil.scaleDoubletoTwo(average));
+		params.put("year", year);
+		params.put("month", mois);
 		response.setContentType("application/pdf");
 		response.addHeader("Content-Disposition",
 				"attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
@@ -171,8 +188,7 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 
 		try {
 			out = response.getOutputStream();
-			jasperPrint = new JasperUtil().generateDoc(list, params,
-					"Dashboard_Detail.jasper", "pdf");
+			jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "pdf");
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 		} catch (FileNotFoundException e) {
 			System.out.println(Arrays.toString(e.getStackTrace()));
@@ -181,36 +197,53 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 		}
 
 	}
-	
-	@Override
-	public void printXlsx(HttpServletResponse response, int year, int month) {
-		JasperPrint jasperPrint = null;
-		Map<String, Object> params = new HashMap<>();
 
-		List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
-				DateUtil.toDate(LocalDate.of(year, month, 1))));
-		String mois = MonthUtil.getMonth(month - 1);
+	private void calculateTotalTbf(List<InterventionMonthVo> list, Map<String, Object> params) {
+		int functionalityTimeWantedHours = 0;
+		int functionalityTimeWantedMinutes = 0;
+		int functionalityTimeAchievedHours = 0;
+		int functionalityTimeAchievedMinutes = 0;
+		int currentBreakPeriodMaintenanceHours = 0;
+		int currentBreakPeriodMaintenanceMinutes = 0;
+		int expectedBreakPeriodMaintenanceHours = 0;
+		int expectedBreakPeriodMaintenanceMinutes = 0;
 
-		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".xlsx" + "\"");
-		OutputStream out = null;
+		for (InterventionMonthVo interventionMonthVo : list) {
+			functionalityTimeWantedHours += NumberUtil
+					.toInt(interventionMonthVo.getFunctionalityTimeWanted().getHour());
+			functionalityTimeAchievedHours += NumberUtil
+					.toInt(interventionMonthVo.getFunctionalityTimeAchieved().getHour());
+			functionalityTimeAchievedMinutes += NumberUtil
+					.toInt(interventionMonthVo.getFunctionalityTimeAchieved().getMinute());
+			currentBreakPeriodMaintenanceHours += NumberUtil
+					.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour());
+			currentBreakPeriodMaintenanceMinutes += NumberUtil
+					.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute());
+			expectedBreakPeriodMaintenanceHours += NumberUtil
+					.toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour());
+			expectedBreakPeriodMaintenanceMinutes += NumberUtil
+					.toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute());
 
-		try {
-			out = response.getOutputStream();
-			jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "xlsx");
-			JRXlsxExporter exporter = new JRXlsxExporter();
-
-			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
-
-			SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
-			reportConfig.setUseTimeZone(true);
-			exporter.setConfiguration(reportConfig);
-			exporter.exportReport();
-		} catch (JRException | IOException e) {
-			e.printStackTrace();
+			if (functionalityTimeAchievedMinutes >= 60) {
+				++functionalityTimeAchievedHours;
+				functionalityTimeAchievedMinutes -= 60;
+			}
+			if (currentBreakPeriodMaintenanceMinutes >= 60) {
+				++currentBreakPeriodMaintenanceHours;
+				currentBreakPeriodMaintenanceMinutes -= 60;
+			}
+			if (expectedBreakPeriodMaintenanceMinutes >= 60) {
+				++expectedBreakPeriodMaintenanceHours;
+				expectedBreakPeriodMaintenanceMinutes -= 60;
+			}
 		}
-
+		params.put("functionalityTimeWanted", new Timing(functionalityTimeWantedHours, functionalityTimeWantedMinutes));
+		params.put("functionalityTimeAchieved",
+				new Timing(functionalityTimeAchievedHours, functionalityTimeAchievedMinutes));
+		params.put("currentBreakPeriodMaintenance",
+				new Timing(currentBreakPeriodMaintenanceHours, currentBreakPeriodMaintenanceMinutes));
+		params.put("expectedBreakPeriodMaintenance",
+				new Timing(expectedBreakPeriodMaintenanceHours, expectedBreakPeriodMaintenanceMinutes));
 	}
 
 	@Override
@@ -246,8 +279,6 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 			System.out.println(Arrays.toString(e.getStackTrace()));
 		}
 	}
-
-	
 
 	public InterventionMonthDao getInterventionMonthDao() {
 		return interventionMonthDao;
