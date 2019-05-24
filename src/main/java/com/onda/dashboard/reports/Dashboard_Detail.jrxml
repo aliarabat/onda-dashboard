@@ -32,8 +32,20 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="equipement" class="com.onda.dashboard.model.Equipement">
-			<fieldDescription><![CDATA[equipement]]></fieldDescription>
+		<field name="functionalityTimeAchieved" class="com.onda.dashboard.model.Timing">
+			<fieldDescription><![CDATA[functionalityTimeAchieved]]></fieldDescription>
+		</field>
+		<field name="currentBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
+			<fieldDescription><![CDATA[currentBreakPeriodMaintenance]]></fieldDescription>
+		</field>
+		<field name="equipementVo" class="com.onda.dashboard.rest.vo.EquipementVo">
+			<fieldDescription><![CDATA[equipementVo]]></fieldDescription>
+		</field>
+		<field name="functionalityTimeWanted" class="com.onda.dashboard.model.Timing">
+			<fieldDescription><![CDATA[functionalityTimeWanted]]></fieldDescription>
+		</field>
+		<field name="tbf" class="java.lang.Double">
+			<fieldDescription><![CDATA[tbf]]></fieldDescription>
 		</field>
 	</subDataset>
 	<subDataset name="interventionDataset" uuid="1cc75cbd-209b-4a44-9a01-5b5ada1ee866">
@@ -54,9 +66,6 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="equipement" class="com.onda.dashboard.model.Equipement">
-		<fieldDescription><![CDATA[equipement]]></fieldDescription>
-	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -134,7 +143,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="170" height="21" uuid="e58bff01-a3ef-47a3-834b-07d31ee995e1"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{equipement}.getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{equipementVo}.getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -151,7 +160,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="230" height="21" uuid="0f654779-572f-4d12-b690-d7dd77bd7841"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{equipement}.getType().getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{equipementVo}.getTypeVo().getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -173,7 +182,13 @@
 									<text><![CDATA[voulu]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="Table_TD" height="21"/>
+							<jr:detailCell style="Table_TD" height="21">
+								<textField>
+									<reportElement x="0" y="0" width="82" height="21" uuid="26bb2832-7557-40eb-a8bc-6f2212c335dd"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{functionalityTimeWanted}.getHour()+":"+$F{functionalityTimeWanted}.getMinute()]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
 						</jr:column>
 						<jr:column width="83" uuid="3408417d-5795-4bb0-aa93-bb5c28e2e77d">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne4"/>
@@ -184,7 +199,13 @@
 									<text><![CDATA[rélisé]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="Table_TD" height="21"/>
+							<jr:detailCell style="Table_TD" height="21">
+								<textField>
+									<reportElement x="0" y="0" width="83" height="21" uuid="12140112-2ff5-4a39-9c5f-6c8ea8c3186e"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{functionalityTimeAchieved}.getHour()+":"+$F{functionalityTimeAchieved}.getMinute()]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
 					<jr:columnGroup width="165" uuid="59d805d9-1fe9-4c5f-a33f-fe9208035ec1">
@@ -205,7 +226,13 @@
 									<text><![CDATA[maint. prév.]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="Table_TD" height="21"/>
+							<jr:detailCell style="Table_TD" height="21">
+								<textField>
+									<reportElement x="0" y="0" width="82" height="21" uuid="26a33131-f334-4ef1-84bc-d04589cddab8"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{equipementVo}.getExpectedBreakPeriodMaintenance().getHour()+":"+$F{equipementVo}.getExpectedBreakPeriodMaintenance().getMinute()]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
 						</jr:column>
 						<jr:column width="83" uuid="1a1e10d9-611b-4937-aae6-de46e06b0d11">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne6"/>
@@ -216,7 +243,13 @@
 									<text><![CDATA[maint. cur]]></text>
 								</staticText>
 							</jr:tableHeader>
-							<jr:detailCell style="Table_TD" height="21"/>
+							<jr:detailCell style="Table_TD" height="21">
+								<textField>
+									<reportElement x="0" y="0" width="83" height="21" uuid="39ab4809-5785-464e-aece-500cceb1e7fc"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression><![CDATA[$F{currentBreakPeriodMaintenance}.getHour()+":"+$F{currentBreakPeriodMaintenance}.getMinute()]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
 					<jr:column width="70" uuid="4e3af1d5-c29b-496f-8ad7-f6cc7b255643">
@@ -228,7 +261,13 @@
 								<text><![CDATA[TBF]]></text>
 							</staticText>
 						</jr:tableHeader>
-						<jr:detailCell style="Table_TD" height="21"/>
+						<jr:detailCell style="Table_TD" height="21">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="21" uuid="d4db1c84-daf2-4cb4-bf45-daeb75c005ac"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{tbf}+"%"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>

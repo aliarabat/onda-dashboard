@@ -6,7 +6,9 @@
 package com.onda.dashboard.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
- *
  * @author hp
  */
 @Entity
@@ -31,17 +32,21 @@ public class InterventionMonth implements Serializable {
     private Long id;
     @OneToOne
     private Equipement equipement;
-    private LocalTime expectedBreakPeriodMaintenance;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date dateIntervention;
+    private Date interventionDate;
     @OneToMany
-    private List<InterventionDay> interventionDays;
+    private List<InterventionDay> interventionDays = new ArrayList<>();
 
     public InterventionMonth(Equipement equipement) {
         this.equipement = equipement;
     }
 
+    public InterventionMonth(Date interventionDate) {
+        this.interventionDate = interventionDate;
+    }
+
     public InterventionMonth() {
+
     }
 
     public Equipement getEquipement() {
@@ -52,12 +57,12 @@ public class InterventionMonth implements Serializable {
         this.equipement = equipement;
     }
 
-    public Date getDateIntervention() {
-        return dateIntervention;
+    public Date getInterventionDate() {
+        return interventionDate;
     }
 
-    public void setDateIntervention(Date dateIntervention) {
-        this.dateIntervention = dateIntervention;
+    public void setInterventionDate(Date interventionDate) {
+        this.interventionDate = interventionDate;
     }
 
     public List<InterventionDay> getInterventionDays() {
@@ -83,16 +88,7 @@ public class InterventionMonth implements Serializable {
         this.id = id;
     }
 
-    public LocalTime getExpectedBreakPeriodMaintenance() {
-        return expectedBreakPeriodMaintenance;
-    }
-
-    public void setExpectedBreakPeriodMaintenance(LocalTime expectedBreakPeriodMaintenance) {
-        this.expectedBreakPeriodMaintenance = expectedBreakPeriodMaintenance;
-    }
-
     /**
-     *
      * @param object
      * @return
      */

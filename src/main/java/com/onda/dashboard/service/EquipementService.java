@@ -15,17 +15,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface EquipementService {
 
-    void printDoc(HttpServletResponse response);
+	public int createEquipement(List<Equipement> equipements);
 
-    public int createEquipement(List<Equipement> equipements);
+	public int editEquipement(Equipement newEquipement);
 
-    void printGraph(HttpServletResponse response);
+	public int deleteEquipement(Long id);
 
-    public int editEquipement(Equipement newEquipement);
-
-    public int deleteEquipement(Long id);
-
-    public Equipement findByName(String name);
+	public Equipement findByName(String name);
 
     public List<Equipement> findAll();
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TBF_Detail" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fe438c92-3793-476e-82f1-1f905db18e29">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TBF_Indicateur" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="27cc4011-e2da-48be-9529-b2175120b595">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -190,14 +190,14 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="265" splitType="Stretch">
-			<stackedBarChart>
+		<band height="300" splitType="Stretch">
+			<barChart>
 				<chart evaluationTime="Report">
-					<reportElement x="129" y="15" width="545" height="250" uuid="d405b3d0-54b9-4a3b-8da6-767c9951132b">
-						<property name="net.sf.jasperreports.customizer.0.tickUnit" value="0.2"/>
-						<property name="net.sf.jasperreports.customizer.class.0" value="net.sf.jasperreports.customizers.axis.RangeAxisCustomizer"/>
-						<propertyExpression name="net.sf.jasperreports.customizer.0.minValue"><![CDATA[$F{tbf}]]></propertyExpression>
-						<propertyExpression name="net.sf.jasperreports.customizer.0.maxValue"><![CDATA[$F{tbf}]]></propertyExpression>
+					<reportElement x="0" y="0" width="555" height="300" uuid="aa530874-a695-4f18-9c01-f97ea849df64">
+						<property name="net.sf.jasperreports.customizer.class.domainAxis" value="net.sf.jasperreports.customizers.axis.DomainAxisCustomizer"/>
+						<property name="net.sf.jasperreports.customizer.domainAxis.minValue" value="99"/>
+						<property name="net.sf.jasperreports.customizer.domainAxis.maxValue" value="100"/>
+						<property name="net.sf.jasperreports.customizer.domainAxis.tickUnit" value="0,1"/>
 					</reportElement>
 					<chartTitle/>
 					<chartSubtitle/>
@@ -205,7 +205,7 @@
 				</chart>
 				<categoryDataset>
 					<dataset>
-						<datasetRun subDataset="dashboardDataSet" uuid="7a0b4275-927a-45a7-93d1-c5618dbb5720">
+						<datasetRun subDataset="dashboardDataSet" uuid="b471ed58-8c31-4747-9dbf-10821fa4014d">
 							<dataSourceExpression><![CDATA[$P{dashboardDataSource}]]></dataSourceExpression>
 						</datasetRun>
 					</dataset>
@@ -213,7 +213,6 @@
 						<seriesExpression><![CDATA[$F{equipementVo}.getName()]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{equipementVo}.getName()]]></categoryExpression>
 						<valueExpression><![CDATA[$F{tbf}]]></valueExpression>
-						<labelExpression><![CDATA[$F{equipementVo}.getName()]]></labelExpression>
 					</categorySeries>
 				</categoryDataset>
 				<barPlot>
@@ -226,7 +225,7 @@
 						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
 					</valueAxisFormat>
 				</barPlot>
-			</stackedBarChart>
+			</barChart>
 		</band>
 	</detail>
 	<summary>

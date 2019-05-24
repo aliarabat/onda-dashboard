@@ -15,11 +15,12 @@ import org.springframework.stereotype.Service;
 import com.onda.dashboard.service.InterventionDayService;
 import com.onda.dashboard.service.InterventionMonthService;
 import com.onda.dashboard.service.EquipementService;
+
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- *
  * @author hp
  */
 @Service
@@ -33,30 +34,41 @@ public class InterventionDayServiceImpl implements InterventionDayService {
     private EquipementService equipementService;
 
     @Override
-    public int createInterventionDay( List<InterventionDay> InterventionDays) {
+    public int createInterventionDay(String name, List<InterventionDay> interventionDays) {
+        Equipement equipement = equipementService.findByName(name);
+        if (equipement == null) {
+            return -1;
+        } else if (interventionDays == null || interventionDays.isEmpty()) {
+            return -2;
+        } else {
+            interventionMonthService.createInterventionMonth(equipement, interventionDays);
+            return 1;
+        }
+    }
 
-        //Equipement equipement = equipementService.findByName(name);
-        for (InterventionDay interventionDay : InterventionDays) {
-            interventionDay.setAnomaly(interventionDay.getAnomaly());
-            interventionDay.setCallIntervention(interventionDay.getCallIntervention());
-            interventionDay.setInterventionStart(interventionDay.getInterventionStart());
-            interventionDay.setInterventionEnd(interventionDay.getInterventionEnd());
-            interventionDay.setBreakNumber(interventionDay.getBreakNumber());
-            Duration dRep = Duration.between(interventionDay.getCallIntervention(), interventionDay.getInterventionStart());
-            Duration dBreak = Duration.between(interventionDay.getCallIntervention(), interventionDay.getInterventionEnd());
-            long dRepHours = dRep.toHours();
-            long dRepMinute = Long.parseLong((dRep.toMinutes()) % 60 + "");
-            Timing tRep = new Timing((int) dRepHours, (int) dRepMinute);
-            interventionDay.setReparationDuration(tRep);
-            long dBreakHours = dBreak.toHours();
-            long dBreakMinute = Long.parseLong((dBreak.toMinutes()) % 60 + "");
-            Timing tBreak = new Timing((int) dBreakHours, (int) dBreakMinute);
-            interventionDay.setBreakDuration(tBreak);
-            interventionDayDao.save(interventionDay);
+    @Override
+    public int modifyInterventionDay(String name, InterventionDay interventionDay) {
+        return 0;
+    }
 
-        }//interventionMonthService.createInterventionMonth(name, InterventionDays);
+    @Override
+    public InterventionDay save(InterventionDay interventionDay) {
+        return interventionDayDao.save(interventionDay);
+    }
 
-        return 1;
+    @Override
+    public InterventionDay setInterventionDayInfos(InterventionDay interventionDay) {
+        //retrieve date attrs
+        LocalDateTime callIntervention = interventionDay.getCallIntervention();
+        LocalDateTime startIntervention = interventionDay.getInterventionStart();
+        LocalDateTime endIntervention = interventionDay.getInterventionEnd();
+        Duration reparationPeriod = Duration.between(callIntervention, startIntervention);
+        Duration breakPeriod = Duration.between(callIntervention, endIntervention);
+        //set durations info
+        interventionDay.setReparationDuration(ReparationAndBreakManipulations(reparationPeriod));
+        interventionDay.setBreakDuration(ReparationAndBreakManipulations(breakPeriod));
+
+        return save(interventionDay);
     }
 
     @Override
@@ -64,9 +76,10 @@ public class InterventionDayServiceImpl implements InterventionDayService {
         return interventionDayDao.findAll();
     }
 
-    @Override
-    public InterventionDay save(InterventionDay interventionDay) {
-        return interventionDayDao.save(interventionDay);
+    private Timing ReparationAndBreakManipulations(Duration period) {
+        long hoursReparationDuration = period.toHours();
+        long minutesReparationDuration = Long.parseLong((period.toMinutes() % 60) + "");
+        return new Timing((int) hoursReparationDuration, (int) minutesReparationDuration);
     }
 
     public InterventionMonthService getInterventionMonthService() {
