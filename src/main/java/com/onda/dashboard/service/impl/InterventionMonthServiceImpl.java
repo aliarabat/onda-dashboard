@@ -56,212 +56,245 @@ import org.springframework.stereotype.Service;
 @Service
 public class InterventionMonthServiceImpl implements InterventionMonthService {
 
-	private static final Logger log = LoggerFactory.getLogger(InterventionMonthServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(InterventionMonthServiceImpl.class);
 
-	@Autowired
-	private InterventionMonthDao interventionMonthDao;
+    @Autowired
+    private InterventionMonthDao interventionMonthDao;
 
-	@Autowired
-	private InterventionDayService interventionDayService;
+    @Autowired
+    private InterventionDayService interventionDayService;
 
-	@Override
-	public void createInterventionMonth(Equipement equipement, List<InterventionDay> interventionDays) {
-		for (InterventionDay interventionDay : interventionDays) {
-			Date dateIntervention = DateUtil.getFirstDayOfMonthByYearAndMonth(
-					interventionDay.getInterventionStart().getYear(),
-					interventionDay.getInterventionStart().getMonthValue());
-			InterventionMonth interventionMonth = findByEquipementNameAndInterventionDate(equipement.getName(),
-					dateIntervention);
-			if (interventionMonth == null) {
-				interventionMonth = new InterventionMonth(dateIntervention);
-				interventionMonth.setEquipement(equipement);
-			}
-			InterventionDay intDayCheck = interventionMonth.getInterventionDays().stream()
-					.filter(intDay -> intDay.getAnomaly().equals(interventionDay.getAnomaly())).findAny().orElse(null);
-			if (intDayCheck == null) {
-				interventionMonth.getInterventionDays()
-						.add(interventionDayService.setInterventionDayInfos(interventionDay));
-				interventionMonthDao.save(interventionMonth);
-			}
-		}
-	}
+    @Override
+    public void createInterventionMonth(Equipement equipement, List<InterventionDay> interventionDays) {
+        for (InterventionDay interventionDay : interventionDays) {
+            Date dateIntervention = DateUtil.getFirstDayOfMonthByYearAndMonth(
+                    interventionDay.getInterventionStart().getYear(),
+                    interventionDay.getInterventionStart().getMonthValue());
+            InterventionMonth interventionMonth = findByEquipementNameAndInterventionDate(equipement.getName(),
+                    dateIntervention);
+            if (interventionMonth == null) {
+                interventionMonth = new InterventionMonth(dateIntervention);
+                interventionMonth.setEquipement(equipement);
+            }
+            InterventionDay intDayCheck = interventionMonth.getInterventionDays().stream()
+                    .filter(intDay -> intDay.getAnomaly().equals(interventionDay.getAnomaly())).findAny().orElse(null);
+            if (intDayCheck == null) {
+                interventionMonth.getInterventionDays()
+                        .add(interventionDayService.setInterventionDayInfos(interventionDay));
+                interventionMonthDao.save(interventionMonth);
+            }
+        }
+    }
 
-	@Override
-	public InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention) {
-		return interventionMonthDao.findByEquipementNameAndInterventionDate(name, dateIntervention);
-	}
+    @Override
+    public InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention) {
+        return interventionMonthDao.findByEquipementNameAndInterventionDate(name, dateIntervention);
+    }
 
-	@Override
-	public InterventionMonth findByEquipementName(String name) {
-		return interventionMonthDao.findByEquipementName(name);
-	}
+    @Override
+    public InterventionMonth findByEquipementName(String name) {
+        return interventionMonthDao.findByEquipementName(name);
+    }
 
-	@Override
-	public List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention) {
-		return interventionMonthDao.findByInterventionDateOrderByEquipementTypeNameAscIdAsc(dateIntervention);
-	}
+    @Override
+    public List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention) {
+        return interventionMonthDao.findByInterventionDateOrderByEquipementTypeNameAscIdAsc(dateIntervention);
+    }
 
-	@Override
-	public List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths) {
-		if (interventionMonths != null && !interventionMonths.isEmpty()) {
-			List<InterventionMonthVo> interventionMonthVos = new InterventionMonthConverter().toVo(interventionMonths);
-			interventionMonthVos.forEach(interventionMonthVo -> {
-				interventionMonthVo.getInterventionPartDaysVo().forEach(interventionDayVo -> {
-					int housMaintenance = interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour()
-							+ NumberUtil.toInt(interventionDayVo.getReparationDuration().getHour());
-					int minutesMaintenance = interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute()
-							+ NumberUtil.toInt(interventionDayVo.getReparationDuration().getMinute());
-					if (minutesMaintenance >= 60) {
-						++housMaintenance;
-						minutesMaintenance = minutesMaintenance - 60;
-					}
-					interventionMonthVo.getCurrentBreakPeriodMaintenance().setHour(housMaintenance);
-					interventionMonthVo.getCurrentBreakPeriodMaintenance().setMinute(minutesMaintenance);
-				});
-				// some calculs for monthly data
-				int functionalityTimeWantedHours = DateUtil
-						.lenghtOfMonth(DateUtil.fromStringToLocalDate(interventionMonthVo.getDateIntervention())) * 24;
-				int functionalityTimeWantedMinutes = 0;
-				int functionalityTimeAchievedHours = functionalityTimeWantedHours - NumberUtil
-						.toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour());
-				int functionalityTimeAchievedMinutes = functionalityTimeWantedMinutes - NumberUtil
-						.toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute());
-				if (functionalityTimeAchievedMinutes < 0) {
-					--functionalityTimeAchievedHours;
-					functionalityTimeAchievedMinutes = functionalityTimeAchievedMinutes + 60;
-				}
-				Double periodFunctionAchieved = functionalityTimeAchievedHours
-						+ NumberUtil.toDouble("0." + (functionalityTimeAchievedMinutes * 10 / 6));
-				// set infos to the main object
-				interventionMonthVo.getFunctionalityTimeWanted().setHour(functionalityTimeWantedHours);
-				interventionMonthVo.getFunctionalityTimeWanted().setMinute(functionalityTimeWantedMinutes);
-				interventionMonthVo.getFunctionalityTimeAchieved().setHour(functionalityTimeAchievedHours);
-				interventionMonthVo.getFunctionalityTimeAchieved().setMinute(functionalityTimeAchievedMinutes);
-				// calculate the tbf
-				Double tbf = periodFunctionAchieved * 100 / functionalityTimeWantedHours;
+    @Override
+    public List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths) {
+        if (interventionMonths != null && !interventionMonths.isEmpty()) {
+            List<InterventionMonthVo> interventionMonthVos = new InterventionMonthConverter().toVo(interventionMonths);
+            interventionMonthVos.forEach(interventionMonthVo -> {
+                interventionMonthVo.getInterventionPartDaysVo().forEach(interventionDayVo -> {
+                    int housMaintenance = NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour())
+                            + NumberUtil.toInt(interventionDayVo.getReparationDuration().getHour());
+                    int minutesMaintenance = NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute())
+                            + NumberUtil.toInt(interventionDayVo.getReparationDuration().getMinute());
+                    if (minutesMaintenance >= 60) {
+                        ++housMaintenance;
+                        minutesMaintenance = minutesMaintenance - 60;
+                    }
+                    interventionMonthVo.getCurrentBreakPeriodMaintenance().setHour(NumberUtil.fromIntToString(housMaintenance));
+                    interventionMonthVo.getCurrentBreakPeriodMaintenance().setMinute(NumberUtil.fromIntToString(minutesMaintenance));
+                });
+                // some calculs for monthly data
+                int functionalityTimeWantedHours = DateUtil
+                        .lenghtOfMonth(DateUtil.fromStringToLocalDate(interventionMonthVo.getDateIntervention())) * 24;
+                int functionalityTimeWantedMinutes = 0;
+                int functionalityTimeAchievedHours = functionalityTimeWantedHours - NumberUtil
+                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour());
+                int functionalityTimeAchievedMinutes = functionalityTimeWantedMinutes - NumberUtil
+                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute());
+                if (functionalityTimeAchievedMinutes < 0) {
+                    --functionalityTimeAchievedHours;
+                    functionalityTimeAchievedMinutes = functionalityTimeAchievedMinutes + 60;
+                }
+                Double periodFunctionAchieved = functionalityTimeAchievedHours
+                        + NumberUtil.toDouble("0." + (functionalityTimeAchievedMinutes * 10 / 6));
+                // set infos to the main object
+                interventionMonthVo.getFunctionalityTimeWanted().setHour(NumberUtil.fromIntToString(functionalityTimeWantedHours));
+                interventionMonthVo.getFunctionalityTimeWanted().setMinute(NumberUtil.fromIntToString(functionalityTimeWantedMinutes));
+                interventionMonthVo.getFunctionalityTimeAchieved().setHour(NumberUtil.fromIntToString(functionalityTimeAchievedHours));
+                interventionMonthVo.getFunctionalityTimeAchieved().setMinute(NumberUtil.fromIntToString(functionalityTimeAchievedMinutes));
+                // calculate the tbf
+                Double tbf = periodFunctionAchieved * 100 / functionalityTimeWantedHours;
 
-				/*
+                /*
 				 * DecimalFormat df = new DecimalFormat(".##");
 				 * df.setRoundingMode(RoundingMode.DOWN); df.format(tbf)
-				 */
-				interventionMonthVo.setTbf(new BigDecimal(tbf).setScale(2, RoundingMode.DOWN).doubleValue());
-			});
-			return interventionMonthVos;
-		}
-		return null;
-	}
+                 */
+                interventionMonthVo.setTbf(new BigDecimal(tbf).setScale(2, RoundingMode.DOWN).doubleValue());
+            });
+            return interventionMonthVos;
+        }
+        return null;
+    }
 
-	@Override
-	public List<InterventionMonthVo> findAll() {
-		return interventionMonthsToPrint(interventionMonthDao.findAll());
-	}
+    @Override
+    public List<InterventionMonthVo> findAll() {
+        return interventionMonthsToPrint(interventionMonthDao.findAll());
+    }
 
-	@Override
-	public void printDoc(HttpServletResponse response, int year, int month) {
-		JasperPrint jasperPrint = null;
-		Map<String, Object> params = new HashMap<>();
+    @Override
+    public void printDoc(HttpServletResponse response, int year, int month) {
+        JasperPrint jasperPrint = null;
+        Map<String, Object> params = new HashMap<>();
 
-		List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
-				DateUtil.toDate(LocalDate.of(year, month, 1))));
-		String mois = MonthUtil.getMonth(month - 1);
-		response.setContentType("application/pdf");
-		response.addHeader("Content-Disposition",
-				"attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
-		OutputStream out = null;
+        List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
+                DateUtil.toDate(LocalDate.of(year, month, 1))));
+        String mois = MonthUtil.getMonth(month - 1);
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition",
+                "attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
+        OutputStream out = null;
 
-		try {
-			out = response.getOutputStream();
-			jasperPrint = new JasperUtil().generateDoc(list, params,
-					"Dashboard_Detail.jasper", "pdf");
-			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-		} catch (FileNotFoundException e) {
-			System.out.println(Arrays.toString(e.getStackTrace()));
-		} catch (JRException | IOException e) {
-			System.out.println(Arrays.toString(e.getStackTrace()));
-		}
+        try {
+            out = response.getOutputStream();
+            jasperPrint = new JasperUtil().generateDoc(list, params,
+                    "Dashboard_Detail.jasper", "pdf");
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        } catch (FileNotFoundException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        } catch (JRException | IOException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
 
-	}
-	
-	@Override
-	public void printXlsx(HttpServletResponse response, int year, int month) {
-		JasperPrint jasperPrint = null;
-		Map<String, Object> params = new HashMap<>();
+    }
 
-		List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
-				DateUtil.toDate(LocalDate.of(year, month, 1))));
-		String mois = MonthUtil.getMonth(month - 1);
+    @Override
+    public void printXlsx(HttpServletResponse response, int year, int month) {
+        JasperPrint jasperPrint = null;
+        Map<String, Object> params = new HashMap<>();
 
-		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".xlsx" + "\"");
-		OutputStream out = null;
+        List<InterventionMonthVo> list = interventionMonthsToPrint(findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
+                DateUtil.toDate(LocalDate.of(year, month, 1))));
+        String mois = MonthUtil.getMonth(month - 1);
 
-		try {
-			out = response.getOutputStream();
-			jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "xlsx");
-			JRXlsxExporter exporter = new JRXlsxExporter();
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".xlsx" + "\"");
+        OutputStream out = null;
 
-			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+        try {
+            out = response.getOutputStream();
+            jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "xlsx");
+            JRXlsxExporter exporter = new JRXlsxExporter();
 
-			SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
-			reportConfig.setUseTimeZone(true);
-			exporter.setConfiguration(reportConfig);
-			exporter.exportReport();
-		} catch (JRException | IOException e) {
-			e.printStackTrace();
-		}
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
 
-	}
+            SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
+            reportConfig.setUseTimeZone(true);
+            exporter.setConfiguration(reportConfig);
+            exporter.exportReport();
+        } catch (JRException | IOException e) {
+            e.printStackTrace();
+        }
 
-	@Override
-	public void printGraph(HttpServletResponse response, int year, int month, double object) {
-		JasperPrint jasperPrint = null;
-		Map<String, Object> params = new HashMap<>();
+    }
 
-		List<InterventionMonthVo> list = interventionMonthsToPrint(
-				findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
-		InterventionMonthVo interventionMonthMin = Collections.min(list, new InterventionMonthComparator());
+    @Override
+    public void printGraph(HttpServletResponse response, int year, int month, double object) {
+        JasperPrint jasperPrint = null;
+        Map<String, Object> params = new HashMap<>();
 
-		Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
+        List<InterventionMonthVo> list = interventionMonthsToPrint(
+                findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
+        InterventionMonthVo interventionMonthMin = Collections.min(list, new InterventionMonthComparator());
 
-		String mois = MonthUtil.getMonth(month - 1);
+        Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
 
-		params.put("tbfMin", interventionMonthMin.getTbf().intValue());
-		params.put("object", NumberUtil.scaleDoubletoTwo(object));
-		params.put("average", NumberUtil.scaleDoubletoTwo(average));
-		params.put("month", mois);
-		params.put("year", year);
+        String mois = MonthUtil.getMonth(month - 1);
 
-		response.setContentType("application/pdf");
-		response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
-		OutputStream out = null;
+        params.put("tbfMin", interventionMonthMin.getTbf().intValue());
+        params.put("object", NumberUtil.scaleDoubletoTwo(object));
+        params.put("average", NumberUtil.scaleDoubletoTwo(average));
+        params.put("month", mois);
+        params.put("year", year);
 
-		try {
-			out = response.getOutputStream();
-			jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
-			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-		} catch (FileNotFoundException e) {
-			System.out.println(Arrays.toString(e.getStackTrace()));
-		} catch (JRException | IOException e) {
-			System.out.println(Arrays.toString(e.getStackTrace()));
-		}
-	}
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
+        OutputStream out = null;
 
-	
+        try {
+            out = response.getOutputStream();
+            jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        } catch (FileNotFoundException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        } catch (JRException | IOException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+    }
 
-	public InterventionMonthDao getInterventionMonthDao() {
-		return interventionMonthDao;
-	}
+    public InterventionMonthDao getInterventionMonthDao() {
+        return interventionMonthDao;
+    }
 
-	public void setInterventionMonthDao(InterventionMonthDao interventionMonthDao) {
-		this.interventionMonthDao = interventionMonthDao;
-	}
+    public void setInterventionMonthDao(InterventionMonthDao interventionMonthDao) {
+        this.interventionMonthDao = interventionMonthDao;
+    }
 
-	public InterventionDayService getInterventionDayService() {
-		return interventionDayService;
-	}
+    public InterventionDayService getInterventionDayService() {
+        return interventionDayService;
+    }
 
-	public void setInterventionDayService(InterventionDayService interventionDayService) {
-		this.interventionDayService = interventionDayService;
-	}
+    public void setInterventionDayService(InterventionDayService interventionDayService) {
+        this.interventionDayService = interventionDayService;
+    }
+
+    @Override
+    public List<InterventionMonthVo> findByYear(int year) {
+        LocalDate ldStart = LocalDate.of(year, 1, 1);
+        LocalDate ldEnd = LocalDate.of(year, 12, 31);
+        List<InterventionMonth> interventions = interventionMonthDao.findByInterventionDateBetweenOrderById(DateUtil.toDate(ldStart), DateUtil.toDate(ldEnd));
+
+        return interventionMonthsToPrint(interventions);
+    }
+
+    @Override
+    public List<InterventionMonthVo> findByYearAndMonth(int year, int month) {
+        LocalDate localDate = LocalDate.of(year, month, 1);
+        List<InterventionMonth> listOfInterventionsMonthly = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(localDate));
+        if (listOfInterventionsMonthly.isEmpty() || listOfInterventionsMonthly == null) {
+            return null;
+        } else {
+            return interventionMonthsToPrint(listOfInterventionsMonthly);
+
+        }
+    }
+
+    @Override
+    public List<InterventionMonthVo> findByYearAndMonthAndEquipement(int year, int month, String name) {
+        LocalDate localDate = LocalDate.of(year, month, 1);
+        Date theDate = DateUtil.toDate(localDate);
+        InterventionMonth theIntervention = findByEquipementNameAndInterventionDate(name, theDate);
+        if (theIntervention == null) {
+            return null;
+        } else {
+            List<InterventionMonth> interventionMonths = new ArrayList<>();
+            interventionMonths.add(theIntervention);
+            return interventionMonthsToPrint(interventionMonths);
+        }
+    }
 }

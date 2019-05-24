@@ -20,23 +20,28 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface InterventionMonthService {
 
-	void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
+    void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
 
-	List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
+    List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
 
-	List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths);
+    List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths);
 
-	InterventionMonth findByEquipementName(String name);
+    InterventionMonth findByEquipementName(String name);
 
-	InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention);
+    InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention);
 
-	List<InterventionMonthVo> findAll();
+    List<InterventionMonthVo> findAll();
 
-	void printDoc(HttpServletResponse response, int year, int month);
+    void printDoc(HttpServletResponse response, int year, int month);
 
-	void printXlsx(HttpServletResponse response, int year, int month);
+    void printXlsx(HttpServletResponse response, int year, int month);
 
-	void printGraph(HttpServletResponse response, int year, int month, double object);
+    void printGraph(HttpServletResponse response, int year, int month, double object);
 
+    List<InterventionMonthVo> findByYear(int year);
+
+    List<InterventionMonthVo> findByYearAndMonth(int year, int month);
+
+    List<InterventionMonthVo> findByYearAndMonthAndEquipement(int year, int month, String name);
 
 }

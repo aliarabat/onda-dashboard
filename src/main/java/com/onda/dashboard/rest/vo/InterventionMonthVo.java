@@ -5,7 +5,6 @@
  */
 package com.onda.dashboard.rest.vo;
 
-import com.onda.dashboard.model.Timing;
 
 import java.util.List;
 
@@ -18,9 +17,9 @@ public class InterventionMonthVo {
     private String dateIntervention;
     private EquipementVo equipementVo;
     private List<InterventionDayVo> interventionPartDaysVo;
-    private Timing functionalityTimeWanted = new Timing();
-    private Timing functionalityTimeAchieved = new Timing();
-    private Timing currentBreakPeriodMaintenance = new Timing();
+    private TimingVo functionalityTimeWanted = new TimingVo();
+    private TimingVo functionalityTimeAchieved = new TimingVo();
+    private TimingVo currentBreakPeriodMaintenance = new TimingVo();
     private Double tbf;
 
     public Long getId() {
@@ -55,30 +54,31 @@ public class InterventionMonthVo {
         this.interventionPartDaysVo = interventionPartDaysVo;
     }
 
-    public Timing getFunctionalityTimeWanted() {
+    public TimingVo getFunctionalityTimeWanted() {
         return functionalityTimeWanted;
     }
 
-    public void setFunctionalityTimeWanted(Timing functionalityTimeWanted) {
+    public void setFunctionalityTimeWanted(TimingVo functionalityTimeWanted) {
         this.functionalityTimeWanted = functionalityTimeWanted;
     }
 
-    public Timing getFunctionalityTimeAchieved() {
+    public TimingVo getFunctionalityTimeAchieved() {
         return functionalityTimeAchieved;
     }
 
-    public void setFunctionalityTimeAchieved(Timing functionalityTimeAchieved) {
+    public void setFunctionalityTimeAchieved(TimingVo functionalityTimeAchieved) {
         this.functionalityTimeAchieved = functionalityTimeAchieved;
     }
 
-    public Timing getCurrentBreakPeriodMaintenance() {
+    public TimingVo getCurrentBreakPeriodMaintenance() {
         return currentBreakPeriodMaintenance;
     }
 
-    public void setCurrentBreakPeriodMaintenance(Timing currentBreakPeriodMaintenance) {
+    public void setCurrentBreakPeriodMaintenance(TimingVo currentBreakPeriodMaintenance) {
         this.currentBreakPeriodMaintenance = currentBreakPeriodMaintenance;
     }
 
+   
     public Double getTbf() {
         return tbf;
     }

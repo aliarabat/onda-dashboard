@@ -44,6 +44,18 @@ public class InterventionMonthRest {
 	public List<InterventionMonthVo> findAll() {
 		return interventionMonthService.findAll();
 	}
+	@GetMapping("/year/{year}")
+    public List<InterventionMonthVo> findByYear(@PathVariable int year) {
+        return interventionMonthService.findByYear(year);
+    }
+	@GetMapping("/search/year/{year}/month/{month}")
+    public List<InterventionMonthVo> findByYearAndMonth(@PathVariable int year,@PathVariable int month) {
+        return interventionMonthService.findByYearAndMonth(year, month);
+    }
+	@GetMapping("/year/{year}/month/{month}/name/{name}")
+    public List<InterventionMonthVo> findByYearAndMonthAndEquipement(@PathVariable int year,@PathVariable int month,@PathVariable String name) {
+        return interventionMonthService.findByYearAndMonthAndEquipement(year, month, name);
+    }
 
 	@GetMapping("/year/{year}/month/{month}")
 	public List<InterventionMonthVo> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(@PathVariable int year,
