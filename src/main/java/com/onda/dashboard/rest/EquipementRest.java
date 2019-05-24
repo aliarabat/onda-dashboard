@@ -57,10 +57,16 @@ public class EquipementRest {
         Equipement newEquipement = equipementConverter.toItem(newEquipementVo);
         return equipementService.editEquipement(newEquipement);
     }
+    
 
     @DeleteMapping("/id/{id}")
     public int deleteEquipement(@PathVariable Long id) {
         return equipementService.deleteEquipement(id);
+    }
+
+    @GetMapping("/nameEquipement/{name}")
+    public List<EquipementVo> findByTypeName(@PathVariable String name) {
+        return equipementConverter.toVo(equipementService.findByTypeName(name));
     }
 
     public EquipementService getEquipementService() {

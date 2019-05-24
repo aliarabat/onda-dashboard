@@ -87,6 +87,11 @@ public class EquipementServiceImpl implements EquipementService {
     }
 
     @Override
+    public List<Equipement> findByTypeName(String name) {
+        return equipementDao.findByTypeName(name);
+    }
+
+    @Override
     public Equipement findByName(String name) {
         return equipementDao.findByName(name);
     }

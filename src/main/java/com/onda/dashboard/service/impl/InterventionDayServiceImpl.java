@@ -82,6 +82,17 @@ public class InterventionDayServiceImpl implements InterventionDayService {
         return new Timing((int) hoursReparationDuration, (int) minutesReparationDuration);
     }
 
+    @Override
+    public Timing getDuration(String ldt1, String ldt2) {
+        LocalDateTime ldt1Time = LocalDateTime.parse(ldt1);
+        LocalDateTime ldt2Time = LocalDateTime.parse(ldt2);
+        Duration duration = Duration.between(ldt1Time, ldt2Time);
+        long durationHours = duration.toHours();
+        long durationMinute = Long.parseLong((duration.toMinutes()) % 60 + "");
+        return new Timing((int) durationHours, (int) durationMinute);
+
+    }
+
     public InterventionMonthService getInterventionMonthService() {
         return interventionMonthService;
     }
