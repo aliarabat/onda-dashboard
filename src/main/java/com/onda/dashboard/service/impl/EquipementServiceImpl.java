@@ -39,6 +39,8 @@ public class EquipementServiceImpl implements EquipementService {
                 if (equipement == null) {
                     equi.setType(checkType);
                     equipementDao.save(equi);
+                } else {
+                    return -2;
                 }
             }
 
