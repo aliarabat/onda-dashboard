@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.onda.dashboard.model.Equipement;
+import java.util.List;
 
 /**
  *
@@ -18,4 +19,6 @@ import com.onda.dashboard.model.Equipement;
 public interface EquipementDao extends JpaRepository<Equipement, Long> {
 
     public Equipement findByName(String name);
+    
+    public List<Equipement> findByTypeName(String name);
 }

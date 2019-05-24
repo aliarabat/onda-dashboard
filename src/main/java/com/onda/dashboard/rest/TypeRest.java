@@ -7,6 +7,7 @@ package com.onda.dashboard.rest;
 
 import com.onda.dashboard.model.Type;
 import com.onda.dashboard.rest.converter.TypeConverter;
+import com.onda.dashboard.rest.vo.EquipementVo;
 import com.onda.dashboard.rest.vo.TypeVo;
 import com.onda.dashboard.service.TypeService;
 import java.util.List;
@@ -62,10 +63,13 @@ public class TypeRest {
     public TypeVo findByName(@PathVariable String name) {
         return new TypeConverter().toVo(typeService.findByName(name));
     }
+
     @GetMapping("/")
     public List<TypeVo> findAllTypes() {
         return new TypeConverter().toVo(typeService.findAllTypes());
     }
+
+  
 
     public TypeService getTypeService() {
         return typeService;

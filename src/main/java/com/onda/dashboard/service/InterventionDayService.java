@@ -6,6 +6,7 @@
 package com.onda.dashboard.service;
 
 import com.onda.dashboard.model.InterventionDay;
+import com.onda.dashboard.model.Timing;
 
 import java.util.List;
 
@@ -23,4 +24,7 @@ public interface InterventionDayService {
     InterventionDay setInterventionDayInfos(InterventionDay interventionDay);
 
     List<InterventionDay> findAll();
+
+    public Timing getDuration(String ldt1, String ldt2);
+
 }
