@@ -208,19 +208,21 @@
 		<band height="350" splitType="Stretch">
 			<stackedBarChart>
 				<chart isShowLegend="true" evaluationTime="Master" customizerClass="com.onda.dashboard.reports.MyBarChartCustomizer" theme="aegean">
-					<reportElement x="51" y="5" width="700" height="340" uuid="dbbfbd80-6437-490c-bf83-5c7c9b7b2687"/>
-					<chartTitle/>
+					<reportElement x="51" y="5" width="700" height="340" isRemoveLineWhenBlank="true" uuid="04e122a0-7ba3-4852-81df-f7031ca3fc5c"/>
+					<chartTitle>
+						<titleExpression><![CDATA["TBF"]]></titleExpression>
+					</chartTitle>
 					<chartSubtitle/>
 					<chartLegend/>
 				</chart>
 				<categoryDataset>
 					<dataset>
-						<datasetRun subDataset="dashboardDataSet" uuid="23814669-adf4-4de4-b559-046f91e14a2e">
+						<datasetRun subDataset="dashboardDataSet" uuid="85c09eea-76ee-4d80-9667-b48aa0c76d8d">
 							<dataSourceExpression><![CDATA[$P{dashboardDataSource}]]></dataSourceExpression>
 						</datasetRun>
 					</dataset>
 					<categorySeries>
-						<seriesExpression><![CDATA[$F{equipementVo}.getName()]]></seriesExpression>
+						<seriesExpression><![CDATA[$F{equipementVo}.getName() +"("+$F{tbf}+"%)"]]></seriesExpression>
 						<categoryExpression><![CDATA[$F{equipementVo}.getName()]]></categoryExpression>
 						<valueExpression><![CDATA[$F{tbf}]]></valueExpression>
 						<labelExpression><![CDATA[$F{equipementVo}.getName()]]></labelExpression>

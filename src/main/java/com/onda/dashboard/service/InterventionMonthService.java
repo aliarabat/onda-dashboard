@@ -12,6 +12,7 @@ import com.onda.dashboard.rest.vo.InterventionMonthVo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,8 +35,7 @@ public interface InterventionMonthService {
 
     void printDoc(HttpServletResponse response, int year, int month);
 
-    void printXlsx(HttpServletResponse response, int year, int month);
-
+    //void printXlsx(HttpServletResponse response, int year, int month);
     void printGraph(HttpServletResponse response, int year, int month, double object);
 
     List<InterventionMonthVo> findByYear(int year);
@@ -43,5 +43,7 @@ public interface InterventionMonthService {
     List<InterventionMonthVo> findByYearAndMonth(int year, int month);
 
     List<InterventionMonthVo> findByYearAndMonthAndEquipement(int year, int month, String name);
+
+    InterventionMonth findById(Long id);
 
 }

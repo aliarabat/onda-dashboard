@@ -32,20 +32,20 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="functionalityTimeAchieved" class="com.onda.dashboard.model.Timing">
-			<fieldDescription><![CDATA[functionalityTimeAchieved]]></fieldDescription>
-		</field>
-		<field name="currentBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
-			<fieldDescription><![CDATA[currentBreakPeriodMaintenance]]></fieldDescription>
-		</field>
 		<field name="equipementVo" class="com.onda.dashboard.rest.vo.EquipementVo">
 			<fieldDescription><![CDATA[equipementVo]]></fieldDescription>
 		</field>
-		<field name="functionalityTimeWanted" class="com.onda.dashboard.model.Timing">
-			<fieldDescription><![CDATA[functionalityTimeWanted]]></fieldDescription>
-		</field>
 		<field name="tbf" class="java.lang.Double">
 			<fieldDescription><![CDATA[tbf]]></fieldDescription>
+		</field>
+		<field name="functionalityTimeAchieved" class="com.onda.dashboard.rest.vo.TimingVo">
+			<fieldDescription><![CDATA[functionalityTimeAchieved]]></fieldDescription>
+		</field>
+		<field name="currentBreakPeriodMaintenance" class="com.onda.dashboard.rest.vo.TimingVo">
+			<fieldDescription><![CDATA[currentBreakPeriodMaintenance]]></fieldDescription>
+		</field>
+		<field name="functionalityTimeWanted" class="com.onda.dashboard.rest.vo.TimingVo">
+			<fieldDescription><![CDATA[functionalityTimeWanted]]></fieldDescription>
 		</field>
 	</subDataset>
 	<subDataset name="interventionDataset" uuid="1cc75cbd-209b-4a44-9a01-5b5ada1ee866">
@@ -57,11 +57,52 @@
 			<fieldDescription><![CDATA[equipement]]></fieldDescription>
 		</field>
 	</subDataset>
+	<subDataset name="tbfDataSet" uuid="2efe9d78-b973-40cf-afc3-71a82ac06ecc">
+		<parameter name="type" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{type}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="functionalityTimeWanted" class="com.onda.dashboard.model.Timing">
+			<defaultValueExpression><![CDATA[$P{functionalityTimeWanted}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="functionalityTimeAchieved" class="com.onda.dashboard.model.Timing">
+			<defaultValueExpression><![CDATA[$P{functionalityTimeAchieved}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="currentBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
+			<defaultValueExpression><![CDATA[$P{currentBreakPeriodMaintenance}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="expectedBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
+			<defaultValueExpression><![CDATA[$P{expectedBreakPeriodMaintenance}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="average" class="java.lang.Double">
+			<defaultValueExpression><![CDATA[$P{average}]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+	</subDataset>
+	<parameter name="year" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{year}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="month" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{month}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="average" class="java.lang.Double">
+		<defaultValueExpression><![CDATA[$P{average}]]></defaultValueExpression>
+	</parameter>
 	<parameter name="dashboardDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
 		<defaultValueExpression><![CDATA[$P{dashboardDataSource}]]></defaultValueExpression>
 	</parameter>
-	<parameter name="type" class="java.lang.String">
-		<defaultValueExpression><![CDATA[$P{type}]]></defaultValueExpression>
+	<parameter name="functionalityTimeWanted" class="com.onda.dashboard.model.Timing">
+		<defaultValueExpression><![CDATA[$P{functionalityTimeWanted}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="functionalityTimeAchieved" class="com.onda.dashboard.model.Timing">
+		<defaultValueExpression><![CDATA[$P{functionalityTimeAchieved}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="currentBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
+		<defaultValueExpression><![CDATA[$P{currentBreakPeriodMaintenance}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="expectedBreakPeriodMaintenance" class="com.onda.dashboard.model.Timing">
+		<defaultValueExpression><![CDATA[$P{expectedBreakPeriodMaintenance}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>
@@ -94,14 +135,14 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="21" splitType="Stretch">
-			<staticText>
-				<reportElement x="276" y="1" width="250" height="20" uuid="8b8e4dd5-d241-4363-8c06-bcf1f04ef877"/>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="194" y="0" width="414" height="20" uuid="3a305515-2784-4336-8f04-9195f6f0fc91"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14"/>
 				</textElement>
-				<text><![CDATA[TABLEAU DE BORD DU MOIS MARS 2019]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["TABLEAU DE BORD DU MOIS "+$P{month}+" "+$P{year}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -116,9 +157,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="80" splitType="Stretch">
+		<band height="61" splitType="Stretch">
 			<componentElement>
-				<reportElement x="1" y="0" width="800" height="61" uuid="56c0b5e5-4ec8-4ae7-ab02-5dfed57df126">
+				<reportElement x="1" y="0" width="801" height="61" uuid="56c0b5e5-4ec8-4ae7-ab02-5dfed57df126">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -150,6 +191,7 @@
 					<jr:column width="230" uuid="8ccff372-33ad-405a-8ce2-5f719ecee540">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
 						<jr:tableHeader style="Table_TH" height="40" rowSpan="2">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<staticText>
 								<reportElement x="0" y="0" width="230" height="40" uuid="478d3d7c-2f1f-4ca7-975f-16b9e03ffc49"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -252,9 +294,10 @@
 							</jr:detailCell>
 						</jr:column>
 					</jr:columnGroup>
-					<jr:column width="70" uuid="4e3af1d5-c29b-496f-8ad7-f6cc7b255643">
+					<jr:column width="71" uuid="4e3af1d5-c29b-496f-8ad7-f6cc7b255643">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne7"/>
 						<jr:tableHeader style="Table_TH" height="40" rowSpan="2">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<staticText>
 								<reportElement x="0" y="0" width="70" height="40" uuid="f26b04b1-bd40-49d2-96da-d1023ff9673b"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -263,7 +306,7 @@
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="21">
 							<textField>
-								<reportElement x="0" y="0" width="70" height="21" uuid="d4db1c84-daf2-4cb4-bf45-daeb75c005ac"/>
+								<reportElement x="0" y="0" width="71" height="21" uuid="d4db1c84-daf2-4cb4-bf45-daeb75c005ac"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{tbf}+"%"]]></textFieldExpression>
 							</textField>
@@ -273,56 +316,117 @@
 			</componentElement>
 		</band>
 	</detail>
-	<summary>
-		<band height="87" splitType="Stretch">
+	<columnFooter>
+		<band height="83">
 			<staticText>
-				<reportElement x="1" y="26" width="126" height="29" uuid="ff0ea708-50e0-4273-b454-f003c766a543"/>
+				<reportElement x="1" y="22" width="126" height="29" uuid="e4c0a605-bf0e-473c-9927-a48ef576b163"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[TBF]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="56" width="126" height="30" uuid="038e9c7d-81fb-411d-9ce3-1aa89b0bf23e"/>
+				<reportElement x="1" y="52" width="126" height="30" uuid="95bdfe72-8ad0-4138-b4d0-1a02ec0ac5dc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[TRP]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="128" y="26" width="673" height="29" uuid="5f7ef744-ab54-4a7c-92e3-ea0b04283106"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<reportElement x="128" y="22" width="542" height="29" uuid="ca64c581-83c0-454a-a1ee-d7b08b8bb48f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{average}+"%"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="128" y="56" width="673" height="30" uuid="0d91deb0-ec6d-4eb3-84ee-d0520644ec87"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<reportElement x="128" y="52" width="542" height="30" uuid="13325fb5-1a58-4b06-8f61-55c6c4891d0d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["100,00%"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="1" y="25" width="800" height="1" uuid="b3312fc6-25bc-4400-a270-5849a1eb4a60"/>
+				<reportElement x="1" y="21" width="679" height="1" uuid="6eefbd4a-e4b1-4ac3-93cd-f83789a7cd56"/>
 			</line>
 			<line>
-				<reportElement x="0" y="25" width="1" height="61" uuid="ee40d197-5626-4171-b6a1-9d3fe498c0a7"/>
+				<reportElement x="0" y="21" width="1" height="61" uuid="b3a005c9-5b10-484e-a18a-995a9c4a29a8"/>
 			</line>
 			<line>
-				<reportElement x="0" y="86" width="802" height="1" uuid="75f149e2-9e35-44c0-a759-2be61a0a4010"/>
+				<reportElement x="0" y="82" width="680" height="1" uuid="30e77abd-92fb-4368-90d4-5fc93bffbce3"/>
 			</line>
 			<line>
-				<reportElement x="801" y="25" width="1" height="61" uuid="284394ef-1846-47aa-b571-5513681d775d"/>
+				<reportElement x="1" y="51" width="679" height="1" uuid="ffe85000-bc5b-415b-bb97-1a72500ce84d"/>
 			</line>
 			<line>
-				<reportElement x="1" y="55" width="800" height="1" uuid="45020504-c6d0-43a2-b247-2c6751611538"/>
+				<reportElement x="127" y="22" width="1" height="29" uuid="6e5906aa-660b-442b-98b7-494591c9f862"/>
 			</line>
 			<line>
-				<reportElement x="127" y="26" width="1" height="29" uuid="2728492e-9dbf-47c6-a0da-6c5d79158da4"/>
-			</line>
-			<line>
-				<reportElement x="127" y="56" width="1" height="30" uuid="6f227f3f-e68d-47a0-8059-39514753681b"/>
+				<reportElement x="127" y="52" width="1" height="30" uuid="5ca7edd6-659f-4e0e-8571-beb01d4f9412"/>
 			</line>
 			<staticText>
-				<reportElement x="0" y="5" width="280" height="19" uuid="baf584a2-58f3-4f79-b4ad-c1e1df67982f"/>
+				<reportElement x="0" y="1" width="280" height="19" uuid="27a01406-894e-49dc-a520-b8e6e908e81f"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Synthèse mensuelle de la TBF des équipements TI]]></text>
 			</staticText>
+			<line>
+				<reportElement x="680" y="21" width="1" height="62" uuid="0dbe87f1-f4a3-4eee-aede-c90272499a51"/>
+			</line>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="24" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="0" width="800" height="1" uuid="b2727029-d095-465f-bdb0-b83df5233bee"/>
+			</line>
+			<line>
+				<reportElement x="1" y="23" width="800" height="1" uuid="057a73b5-9cf8-4a10-894f-2b9d09f13d80"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="24" uuid="6eddda61-4316-4a52-986a-25a463303a86"/>
+			</line>
+			<line>
+				<reportElement x="801" y="0" width="1" height="24" uuid="42606066-d16d-4cd8-9d8a-efb2702b3d66"/>
+			</line>
+			<line>
+				<reportElement x="401" y="1" width="1" height="22" uuid="1f2b4270-eaed-46be-a93b-85545f757185"/>
+			</line>
+			<line>
+				<reportElement x="483" y="1" width="1" height="22" uuid="36f48551-7c9a-44cb-abad-83926e70e6b5"/>
+			</line>
+			<line>
+				<reportElement x="566" y="1" width="1" height="22" uuid="222a2408-61f4-4746-aa8e-01f5b93fba28"/>
+			</line>
+			<line>
+				<reportElement x="648" y="1" width="1" height="22" uuid="de829bba-4a8a-4778-9e8c-08ed5258d9f9"/>
+			</line>
+			<line>
+				<reportElement x="731" y="1" width="1" height="22" uuid="fab5153b-e8a4-40a3-8dcf-569599c5db44"/>
+			</line>
+			<staticText>
+				<reportElement x="1" y="1" width="400" height="22" uuid="b29fb8c7-6343-4c1e-b6d5-e8506513ef95"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TBF]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="402" y="1" width="81" height="22" uuid="59dac220-db31-4402-bfe5-f53ee414c733"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{functionalityTimeWanted}.getHour()+":"+$P{functionalityTimeWanted}.getMinute()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="484" y="1" width="82" height="22" uuid="c8033606-4716-4036-8ede-dc312439d781"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{functionalityTimeAchieved}.getHour()+":"+$P{functionalityTimeAchieved}.getMinute()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="732" y="1" width="69" height="22" uuid="31cbda48-3116-4f50-9ec5-a9aa099d56aa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{average}+"%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="649" y="1" width="82" height="22" uuid="944c37a1-0bed-4894-af45-d8a3587df1aa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{currentBreakPeriodMaintenance}.getHour()+":"+$P{currentBreakPeriodMaintenance}.getMinute()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="567" y="1" width="81" height="22" uuid="d369758f-63bd-4be3-b033-ba084d3bda10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{expectedBreakPeriodMaintenance}.getHour()+":"+$P{expectedBreakPeriodMaintenance}.getMinute()]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
