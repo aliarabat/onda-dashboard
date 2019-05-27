@@ -36,35 +36,35 @@ import javax.servlet.http.HttpServletResponse;
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RequestMapping("/dashboard-api/dashboards/interventionMonth")
 public class InterventionMonthRest {
-
+    
     @Autowired
     private InterventionMonthService interventionMonthService;
-
+    
     @GetMapping("/")
     public List<InterventionMonthVo> findAll() {
         return interventionMonthService.findAll();
     }
-
+    
     @GetMapping("/id/{id}")
     public InterventionMonthVo findById(@PathVariable Long id) {
         return new InterventionMonthConverter().toVo(interventionMonthService.findById(id));
     }
-
+    
     @GetMapping("/year/{year}")
     public List<InterventionMonthVo> findByYear(@PathVariable int year) {
         return interventionMonthService.findByYear(year);
     }
-
+    
     @GetMapping("/search/year/{year}/month/{month}")
     public List<InterventionMonthVo> findByYearAndMonth(@PathVariable int year, @PathVariable int month) {
         return interventionMonthService.findByYearAndMonth(year, month);
     }
-
+    
     @GetMapping("/year/{year}/month/{month}/name/{name}")
     public List<InterventionMonthVo> findByYearAndMonthAndEquipement(@PathVariable int year, @PathVariable int month, @PathVariable String name) {
         return interventionMonthService.findByYearAndMonthAndEquipement(year, month, name);
     }
-
+    
     @GetMapping("/year/{year}/month/{month}")
     public List<InterventionMonthVo> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(@PathVariable int year,
             @PathVariable int month) {
@@ -72,26 +72,31 @@ public class InterventionMonthRest {
                 interventionMonthService.findByInterventionDateOrderByEquipementTypeNameAscIdAsc(
                         DateUtil.toDate(LocalDate.of(year, month, 1))));
     }
-
+    
     private List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths) {
         return interventionMonthService.interventionMonthsToPrint(interventionMonths);
     }
-
-    @GetMapping("/year/{year}/month/{month}/printdoc/pdf")
+    
+    @GetMapping("/interventiontoprint/year/{year}/month/{month}")
+    public InterventionMonthVo findTopByInterventionDate(@PathVariable int year, @PathVariable int month) {
+        return new InterventionMonthConverter().toVo(interventionMonthService.findTopByInterventionDate(DateUtil.getFirstDayOfMonthByYearAndMonth(year, month)));
+    }
+    
+    @GetMapping("/printdoc/year/{year}/month/{month}")
     public void printDoc(HttpServletResponse response, @PathVariable int year, @PathVariable int month) {
         interventionMonthService.printDoc(response, year, month);
     }
-
-    @GetMapping("/year/{year}/month/{month}/object/{object}/printgraph/pdf")
+    
+    @GetMapping("/printgraph/year/{year}/month/{month}/object/{object}")
     public void printGraph(HttpServletResponse response, @PathVariable int year, @PathVariable int month,
             @PathVariable double object) {
         interventionMonthService.printGraph(response, year, month, object);
     }
-
+    
     public InterventionMonthService getInterventionMonthService() {
         return interventionMonthService;
     }
-
+    
     public void setInterventionMonthService(InterventionMonthService interventionMonthService) {
         this.interventionMonthService = interventionMonthService;
     }

@@ -26,4 +26,6 @@ public interface InterventionMonthDao extends JpaRepository<InterventionMonth, L
     List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
 
     List<InterventionMonth> findByInterventionDateBetweenOrderById(Date date1, Date date2);
+    
+    InterventionMonth findTopByInterventionDate(Date date);
 }

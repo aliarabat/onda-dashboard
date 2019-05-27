@@ -103,6 +103,11 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
     }
 
     @Override
+    public InterventionMonth findTopByInterventionDate(Date date){
+        return interventionMonthDao.findTopByInterventionDate(date);
+    }
+
+    @Override
     public List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths) {
         if (interventionMonths != null && !interventionMonths.isEmpty()) {
             List<InterventionMonthVo> interventionMonthVos = new InterventionMonthConverter().toVo(interventionMonths);

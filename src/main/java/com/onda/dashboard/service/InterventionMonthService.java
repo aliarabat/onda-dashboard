@@ -35,7 +35,8 @@ public interface InterventionMonthService {
 
     void printDoc(HttpServletResponse response, int year, int month);
 
-    //void printXlsx(HttpServletResponse response, int year, int month);
+    InterventionMonth findTopByInterventionDate(Date date);
+
     void printGraph(HttpServletResponse response, int year, int month, double object);
 
     List<InterventionMonthVo> findByYear(int year);
