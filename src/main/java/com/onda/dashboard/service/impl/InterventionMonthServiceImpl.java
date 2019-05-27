@@ -115,13 +115,13 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 interventionMonthVo.getInterventionPartDaysVo().forEach(interventionDayVo -> {
                     int housMaintenance = NumberUtil
                             .toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour())
-                            + NumberUtil.toInt(interventionDayVo.getReparationDuration().getHour());
+                            + NumberUtil.toInt(interventionDayVo.getBreakDuration().getHour());
                     int minutesMaintenance = NumberUtil
                             .toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute())
-                            + NumberUtil.toInt(interventionDayVo.getReparationDuration().getMinute());
+                            + NumberUtil.toInt(interventionDayVo.getBreakDuration().getMinute());
                     if (minutesMaintenance >= 60) {
                         ++housMaintenance;
-                        minutesMaintenance = minutesMaintenance - 60;
+                        minutesMaintenance -= 60;
                     }
                     interventionMonthVo.getCurrentBreakPeriodMaintenance()
                             .setHour(NumberUtil.toString(housMaintenance));
@@ -132,10 +132,12 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 int functionalityTimeWantedHours = DateUtil
                         .lenghtOfMonth(DateUtil.fromStringToLocalDate(interventionMonthVo.getDateIntervention())) * 24;
                 int functionalityTimeWantedMinutes = 0;
-                int functionalityTimeAchievedHours = functionalityTimeWantedHours - NumberUtil
-                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour());
-                int functionalityTimeAchievedMinutes = functionalityTimeWantedMinutes - NumberUtil
-                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute());
+                int functionalityTimeAchievedHours = functionalityTimeWantedHours - (NumberUtil
+                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour())
+                        +NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour()));
+                int functionalityTimeAchievedMinutes = functionalityTimeWantedMinutes - (NumberUtil
+                        .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute())
+                        +NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute()));
                 if (functionalityTimeAchievedMinutes < 0) {
                     --functionalityTimeAchievedHours;
                     functionalityTimeAchievedMinutes = functionalityTimeAchievedMinutes + 60;
