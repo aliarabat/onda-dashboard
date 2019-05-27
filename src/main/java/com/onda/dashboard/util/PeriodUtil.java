@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
  *
  * @author Xrio
@@ -38,7 +37,6 @@ public class PeriodUtil {
             sumMinute = (60 - startingMinute) + endingMinute;
         }
 
-   
         return new Timing(sumHour, sumMinute);
     }
 
@@ -49,13 +47,6 @@ public class PeriodUtil {
             }
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        Timing t = getDuration(11, 00, 11, 30);
-        System.out.println("duration" + t);
-       
-
     }
 
     public static void minutesToHour(int hoursHnWorked, int minutesHnWorked, int hoursHeWorked, int minutesHeWorked) {
