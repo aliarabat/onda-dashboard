@@ -238,7 +238,7 @@
 								<staticText>
 									<reportElement x="0" y="0" width="83" height="21" uuid="dcb369cb-2b9b-465f-9f7c-160e9a3abcf4"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle"/>
-									<text><![CDATA[rélisé]]></text>
+									<text><![CDATA[réalisé]]></text>
 								</staticText>
 							</jr:tableHeader>
 							<jr:detailCell style="Table_TD" height="21">

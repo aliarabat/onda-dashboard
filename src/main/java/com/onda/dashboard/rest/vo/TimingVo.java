@@ -38,6 +38,12 @@ public class TimingVo {
     public void setMinute(String minute) {
         this.minute = minute;
     }
+
+    @Override
+    public String toString() {
+        return "TimingVo{" + "hour=" + hour + ", minute=" + minute + '}';
+    }
+    
     
     
 }

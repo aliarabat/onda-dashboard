@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +31,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.onda.dashboard.util.Config;
 import com.onda.dashboard.util.DateUtil;
 import com.onda.dashboard.util.InterventionMonthComparator;
 import com.onda.dashboard.util.JasperUtil;
@@ -41,10 +41,6 @@ import com.onda.dashboard.util.NumberUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +99,7 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
     }
 
     @Override
-    public InterventionMonth findTopByInterventionDate(Date date){
+    public InterventionMonth findTopByInterventionDate(Date date) {
         return interventionMonthDao.findTopByInterventionDate(date);
     }
 
@@ -141,7 +137,7 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 if (functionalityTimeAchievedMinutes < 0) {
                     --functionalityTimeAchievedHours;
                     functionalityTimeAchievedMinutes = functionalityTimeAchievedMinutes + 60;
-                }
+                    }
                 Double periodFunctionAchieved = functionalityTimeAchievedHours
                         + NumberUtil.toDouble("0." + (functionalityTimeAchievedMinutes * 10 / 6));
                 // set infos to the main object
