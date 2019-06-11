@@ -31,7 +31,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.onda.dashboard.util.Config;
 import com.onda.dashboard.util.DateUtil;
 import com.onda.dashboard.util.InterventionMonthComparator;
 import com.onda.dashboard.util.JasperUtil;
@@ -130,16 +129,19 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 int functionalityTimeWantedMinutes = 0;
                 int functionalityTimeAchievedHours = functionalityTimeWantedHours - (NumberUtil
                         .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getHour())
-                        +NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour()));
+                        + NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getHour()));
                 int functionalityTimeAchievedMinutes = functionalityTimeWantedMinutes - (NumberUtil
                         .toInt(interventionMonthVo.getEquipementVo().getExpectedBreakPeriodMaintenance().getMinute())
-                        +NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute()));
-                if (functionalityTimeAchievedMinutes < 0) {
+                        + NumberUtil.toInt(interventionMonthVo.getCurrentBreakPeriodMaintenance().getMinute()));
+                if (functionalityTimeAchievedMinutes < 0 && functionalityTimeAchievedMinutes >= -60) {
                     --functionalityTimeAchievedHours;
                     functionalityTimeAchievedMinutes = functionalityTimeAchievedMinutes + 60;
-                    }
-                Double periodFunctionAchieved = functionalityTimeAchievedHours
-                        + NumberUtil.toDouble("0." + (functionalityTimeAchievedMinutes * 10 / 6));
+                } else if (functionalityTimeAchievedMinutes < -60) {
+                    int restMinutes = Math.abs(functionalityTimeAchievedMinutes) - ((Math.abs(functionalityTimeAchievedMinutes) / 60) * 60);
+                    functionalityTimeAchievedHours = functionalityTimeAchievedHours - ((Math.abs(functionalityTimeAchievedMinutes) / 60) + (restMinutes > 0 ? 1 : 0));
+                    functionalityTimeAchievedMinutes = 60 - restMinutes;
+                }
+                Double periodFunctionAchieved = functionalityTimeAchievedHours + NumberUtil.toDouble(functionalityTimeAchievedMinutes / 60 + "");
                 // set infos to the main object
                 interventionMonthVo.getFunctionalityTimeWanted()
                         .setHour(NumberUtil.toString(functionalityTimeWantedHours));
@@ -177,9 +179,8 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
 
         Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
-        Timing timing = new Timing(111, 22);
+
         String mois = MonthUtil.getMonth(month - 1);
-        // params.put("functionalityTimeWanted", 11111);
         calculateTotalTbf(list, params);
         params.put("average", NumberUtil.scaleDoubletoTwo(average));
         params.put("year", year);
@@ -337,5 +338,17 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
     @Override
     public InterventionMonth findById(Long id) {
         return interventionMonthDao.getOne(id);
+    }
+
+    @Override
+    public void deleteAnomaly(long idMonth, long idAnomalie) {
+        InterventionMonth interventionMonth = findById(idMonth);
+        if (interventionMonth != null) {
+            InterventionDay iDay = interventionMonth.getInterventionDays().stream().filter(item -> item.getId() == idAnomalie).findFirst().orElse(null);
+            if (iDay!=null) {
+                interventionMonth.getInterventionDays().remove(iDay);
+                interventionMonthDao.saveAndFlush(interventionMonth);
+            }
+        }
     }
 }

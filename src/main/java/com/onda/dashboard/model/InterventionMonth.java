@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,7 @@ public class InterventionMonth implements Serializable {
     private Equipement equipement;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date interventionDate;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE,orphanRemoval = true)
     private List<InterventionDay> interventionDays = new ArrayList<>();
 
     public InterventionMonth(Equipement equipement) {

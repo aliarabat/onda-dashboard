@@ -47,4 +47,5 @@ public interface InterventionMonthService {
 
     InterventionMonth findById(Long id);
 
+    void deleteAnomaly(long idMonth, long idAnomalie);
 }

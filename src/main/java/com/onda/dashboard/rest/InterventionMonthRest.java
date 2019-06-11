@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 /**
  *
@@ -92,6 +93,11 @@ public class InterventionMonthRest {
     public void printGraph(HttpServletResponse response, @PathVariable int year, @PathVariable int month,
             @PathVariable double object) {
         interventionMonthService.printGraph(response, year, month, object);
+    }
+
+    @DeleteMapping("/idMonth/{idMonth}/idAnomalie/{idAnomalie}")
+    public void deleteAnomaly(@PathVariable long idMonth, @PathVariable long idAnomalie) {
+        interventionMonthService.deleteAnomaly(idMonth, idAnomalie);
     }
 
     public InterventionMonthService getInterventionMonthService() {

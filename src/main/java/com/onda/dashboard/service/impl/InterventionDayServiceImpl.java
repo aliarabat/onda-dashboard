@@ -62,7 +62,7 @@ public class InterventionDayServiceImpl implements InterventionDayService {
         LocalDateTime callIntervention = interventionDay.getCallIntervention();
         LocalDateTime startIntervention = interventionDay.getInterventionStart();
         LocalDateTime endIntervention = interventionDay.getInterventionEnd();
-        Duration reparationPeriod = Duration.between(callIntervention, startIntervention);
+        Duration reparationPeriod = Duration.between(startIntervention, endIntervention);
         Duration breakPeriod = Duration.between(callIntervention, endIntervention);
         //set durations info
         interventionDay.setReparationDuration(ReparationAndBreakManipulations(reparationPeriod));
