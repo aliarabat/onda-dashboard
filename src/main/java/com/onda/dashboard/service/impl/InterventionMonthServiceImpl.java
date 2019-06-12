@@ -36,10 +36,14 @@ import com.onda.dashboard.util.InterventionMonthComparator;
 import com.onda.dashboard.util.JasperUtil;
 import com.onda.dashboard.util.MonthUtil;
 import com.onda.dashboard.util.NumberUtil;
+import java.io.ByteArrayOutputStream;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -185,15 +189,26 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
         params.put("average", NumberUtil.scaleDoubletoTwo(average));
         params.put("year", year);
         params.put("month", mois);
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition",
-                "attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
+
         OutputStream out = null;
 
         try {
             out = response.getOutputStream();
             jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+            //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+
+            JRPdfExporter pdfExporter = new JRPdfExporter();
+            pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
+            pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
+            pdfExporter.exportReport();
+
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
+
+            out.write(pdfReportStream.toByteArray());
+            out.close();
+            pdfReportStream.close();
         } catch (FileNotFoundException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         } catch (JRException | IOException e) {
@@ -269,14 +284,25 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
         params.put("month", mois);
         params.put("year", year);
 
-        response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
         OutputStream out = null;
 
         try {
             out = response.getOutputStream();
             jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+            //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+
+            JRPdfExporter pdfExporter = new JRPdfExporter();
+            pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
+            pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
+            pdfExporter.exportReport();
+
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
+
+            out.write(pdfReportStream.toByteArray());
+            out.close();
+            pdfReportStream.close();
         } catch (FileNotFoundException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         } catch (JRException | IOException e) {
@@ -345,7 +371,7 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
         InterventionMonth interventionMonth = findById(idMonth);
         if (interventionMonth != null) {
             InterventionDay iDay = interventionMonth.getInterventionDays().stream().filter(item -> item.getId() == idAnomalie).findFirst().orElse(null);
-            if (iDay!=null) {
+            if (iDay != null) {
                 interventionMonth.getInterventionDays().remove(iDay);
                 interventionMonthDao.saveAndFlush(interventionMonth);
             }
