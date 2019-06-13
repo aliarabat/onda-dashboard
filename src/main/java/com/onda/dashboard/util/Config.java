@@ -13,8 +13,7 @@ import java.io.File;
  */
 public class Config {
 
-    private static final File file = new File("");
-    private static String cheminJasper = file.getAbsolutePath() + "\\src\\main\\java\\com\\onda\\dashboard\\reports\\";
+    private static String cheminJasper = "reports/";
     private static String cheminExport = "E:\\employess";
 
     public static String getCheminJasper() {

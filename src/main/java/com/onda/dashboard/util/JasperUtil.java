@@ -63,7 +63,7 @@ public class JasperUtil {
     public JasperPrint generatePdf(List<InterventionMonthVo> list, Map<String, Object> params, String cheminJapser)
             throws FileNotFoundException, JRException, IOException {
 
-        InputStream reportSource = new FileInputStream(cheminJapser);
+        InputStream reportSource = getClass().getClassLoader().getResourceAsStream(cheminJapser);
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(list);
         params.put("dashboardDataSource", beanCollectionDataSource);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportSource, params,
@@ -95,11 +95,10 @@ public class JasperUtil {
         Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + chemin);
     }
 
-    public static JasperPrint generateXls(List list, Map<String, Object> params, String cheminJapser,
+    public JasperPrint generateXls(List list, Map<String, Object> params, String cheminJapser,
             String cheminExport) throws JRException, FileNotFoundException, IOException {
-        InputStream reportSource = null;
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(list);
-        reportSource = new FileInputStream(cheminJapser);
+        InputStream reportSource = getClass().getClassLoader().getResourceAsStream(cheminJapser);
         params.put("workDataSource", beanCollectionDataSource);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportSource, params, new JREmptyDataSource());

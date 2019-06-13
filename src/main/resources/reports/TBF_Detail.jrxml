@@ -138,8 +138,8 @@
 				<text><![CDATA[INDICATEUR: TBF]]></text>
 			</staticText>
 			<image>
-				<reportElement x="361" y="5" width="80" height="60" uuid="6635cc96-8d76-4e9f-bb6f-f2ebcb1e11bc"/>
-				<imageExpression><![CDATA["src/main/java/com/onda/dashboard/reports/logo.png"]]></imageExpression>
+				<reportElement x="360" y="5" width="80" height="58" uuid="9a17f478-0641-4dd9-afef-e09d4531ad48"/>
+				<imageExpression><![CDATA["src/main/resources/reports/logo.png"]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
