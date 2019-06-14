@@ -5,8 +5,9 @@
  */
 package com.onda.dashboard.service;
 
-import com.onda.dashboard.model.Type;
 import java.util.List;
+
+import com.onda.dashboard.model.Type;
 
 /**
  *
@@ -14,17 +15,17 @@ import java.util.List;
  */
 public interface TypeService {
 
-    Type findByReferenceAndName(String reference, String name);
+	Type findByReferenceAndName(String reference, String name);
 
-    int createType(Type type);
+	int createType(Type type);
 
-    int editType(Type newType);
+	int editType(Type newType);
 
-    int deleteType(Long id);
+	int deleteType(Long id);
 
-    Type findById(Long id);
+	Type findById(Long id);
 
-    Type findByName(String name);
+	Type findByName(String name);
 
-    List<Type> findAllTypes();
+	List<Type> findAllTypes();
 }

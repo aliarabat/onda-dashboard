@@ -6,6 +6,7 @@
 package com.onda.dashboard.model;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,52 +19,52 @@ import javax.persistence.Id;
 @Entity
 public class Timing implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private int hour = 00;
-    private int minute = 00;
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	private int hour = 00;
+	private int minute = 00;
 
-    public Timing(int hour, int minute) {
-        this.hour = hour;
-        this.minute = minute;
-    }
+	public Timing(int hour, int minute) {
+		this.hour = hour;
+		this.minute = minute;
+	}
 
-    public Timing(int hour) {
-        this.hour = hour;
-    }
+	public Timing(int hour) {
+		this.hour = hour;
+	}
 
-    public Timing() {
-    }
+	public Timing() {
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public int getHour() {
-        return hour;
-    }
+	public int getHour() {
+		return hour;
+	}
 
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
+	public void setHour(int hour) {
+		this.hour = hour;
+	}
 
-    public int getMinute() {
-        return minute;
-    }
+	public int getMinute() {
+		return minute;
+	}
 
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
 
-    @Override
-    public String toString() {
-        return "Timing{" + "hour=" + hour + ", minute=" + minute + '}';
-    }
+	@Override
+	public String toString() {
+		return "Timing{" + "hour=" + hour + ", minute=" + minute + '}';
+	}
 
 }

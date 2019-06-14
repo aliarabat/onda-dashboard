@@ -5,47 +5,46 @@
  */
 package com.onda.dashboard.service;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import com.onda.dashboard.model.Equipement;
 import com.onda.dashboard.model.InterventionDay;
 import com.onda.dashboard.model.InterventionMonth;
 import com.onda.dashboard.rest.vo.InterventionMonthVo;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author hp
  */
 public interface InterventionMonthService {
 
-    void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
+	void createInterventionMonth(Equipement equipement, List<InterventionDay> InterventionDays);
 
-    List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
+	List<InterventionMonth> findByInterventionDateOrderByEquipementTypeNameAscIdAsc(Date dateIntervention);
 
-    List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths);
+	List<InterventionMonthVo> interventionMonthsToPrint(List<InterventionMonth> interventionMonths);
 
-    InterventionMonth findByEquipementName(String name);
+	InterventionMonth findByEquipementName(String name);
 
-    InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention);
+	InterventionMonth findByEquipementNameAndInterventionDate(String name, Date dateIntervention);
 
-    List<InterventionMonthVo> findAll();
+	List<InterventionMonthVo> findAll();
 
-    void printDoc(HttpServletResponse response, int year, int month);
+	void printDoc(HttpServletResponse response, int year, int month);
 
-    InterventionMonth findTopByInterventionDate(Date date);
+	InterventionMonth findTopByInterventionDate(Date date);
 
-    void printGraph(HttpServletResponse response, int year, int month, double object);
+	void printGraph(HttpServletResponse response, int year, int month, double object);
 
-    List<InterventionMonthVo> findByYear(int year);
+	List<InterventionMonthVo> findByYear(int year);
 
-    List<InterventionMonthVo> findByYearAndMonth(int year, int month);
+	List<InterventionMonthVo> findByYearAndMonth(int year, int month);
 
-    List<InterventionMonthVo> findByYearAndMonthAndEquipement(int year, int month, String name);
+	List<InterventionMonthVo> findByYearAndMonthAndEquipement(int year, int month, String name);
 
-    InterventionMonth findById(Long id);
+	InterventionMonth findById(Long id);
 
-    void deleteAnomaly(long idMonth, long idAnomalie);
+	void deleteAnomaly(long idMonth, long idAnomalie);
 }

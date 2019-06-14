@@ -5,28 +5,27 @@
  */
 package com.onda.dashboard.service;
 
-import com.onda.dashboard.model.Equipement;
-
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
+import com.onda.dashboard.model.Equipement;
 
 /**
  * @author hp
  */
 public interface EquipementService {
 
-    int createEquipement(List<Equipement> equipements);
+	int createEquipement(List<Equipement> equipements);
 
-    int editEquipement(Equipement newEquipement);
+	int editEquipement(Equipement newEquipement);
 
-    int deleteEquipement(Long id);
+	int deleteEquipement(Long id);
 
-    Equipement findByName(String name);
+	Equipement findByName(String name);
 
-    List<Equipement> findAll();
+	List<Equipement> findAll();
 
-    Equipement findById(Long id);
+	Equipement findById(Long id);
 
-    List<Equipement> findByTypeName(String name);
+	List<Equipement> findByTypeName(String name);
 
 }

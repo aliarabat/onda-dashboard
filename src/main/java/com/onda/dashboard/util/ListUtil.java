@@ -12,16 +12,16 @@ import java.util.List;
  * @author Xrio
  */
 public class ListUtil {
-    
-    private static boolean isNull(List list){
-        return ObjectUtil.isNull(list);
-    }
-    
-    private static boolean isEmpty(List list){
-        return list.isEmpty();
-    }
-    
-    private static int size(List list){
-        return list.size();
-    }
+
+	private static boolean isNull(List list) {
+		return ObjectUtil.isNull(list);
+	}
+
+	private static boolean isEmpty(List list) {
+		return list.isEmpty();
+	}
+
+	private static int size(List list) {
+		return list.size();
+	}
 }

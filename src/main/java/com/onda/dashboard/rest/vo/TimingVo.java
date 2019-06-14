@@ -11,39 +11,37 @@ package com.onda.dashboard.rest.vo;
  */
 public class TimingVo {
 
-    private Long id;
-    private String hour ;
-    private String minute ;
+	private Long id;
+	private String hour;
+	private String minute;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getHour() {
-        return hour;
-    }
+	public String getHour() {
+		return hour;
+	}
 
-    public void setHour(String hour) {
-        this.hour = hour;
-    }
+	public void setHour(String hour) {
+		this.hour = hour;
+	}
 
-    public String getMinute() {
-        return minute;
-    }
+	public String getMinute() {
+		return minute;
+	}
 
-    public void setMinute(String minute) {
-        this.minute = minute;
-    }
+	public void setMinute(String minute) {
+		this.minute = minute;
+	}
 
-    @Override
-    public String toString() {
-        return "TimingVo{" + "hour=" + hour + ", minute=" + minute + '}';
-    }
-    
-    
-    
+	@Override
+	public String toString() {
+		return "TimingVo{" + "hour=" + hour + ", minute=" + minute + '}';
+	}
+
 }

@@ -5,31 +5,29 @@
  */
 package com.onda.dashboard.util;
 
-import java.io.File;
-
 /**
  *
  * @author moulaYounes
  */
 public class Config {
 
-    private static String cheminJasper = "reports/";
-    private static String cheminExport = "E:\\employess";
+	private static String cheminJasper = "reports/";
+	private static String cheminExport = "E:\\employess";
 
-    public static String getCheminJasper() {
-        return cheminJasper;
-    }
+	public static String getCheminJasper() {
+		return cheminJasper;
+	}
 
-    public static void setCheminJasper(String cheminJasper) {
-        Config.cheminJasper = cheminJasper;
-    }
+	public static void setCheminJasper(String cheminJasper) {
+		Config.cheminJasper = cheminJasper;
+	}
 
-    public static String getCheminExport() {
-        return cheminExport;
-    }
+	public static String getCheminExport() {
+		return cheminExport;
+	}
 
-    public static void setCheminExport(String cheminExport) {
-        Config.cheminExport = cheminExport;
-    }
+	public static void setCheminExport(String cheminExport) {
+		Config.cheminExport = cheminExport;
+	}
 
 }
