@@ -25,6 +25,6 @@ public interface InterventionDayService {
 
     List<InterventionDay> findAll();
 
-    public Timing getDuration(String ldt1, String ldt2);
+    Timing getDuration(String ldt1, String ldt2);
 
 }

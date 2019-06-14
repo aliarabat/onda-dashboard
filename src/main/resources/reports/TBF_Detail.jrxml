@@ -53,6 +53,9 @@
 	<parameter name="year" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[$P{year}]]></defaultValueExpression>
 	</parameter>
+	<parameter name="logoImage" class="java.io.InputStream">
+		<defaultValueExpression><![CDATA[$P{logoImage}]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -139,7 +142,7 @@
 			</staticText>
 			<image>
 				<reportElement x="360" y="5" width="80" height="58" uuid="9a17f478-0641-4dd9-afef-e09d4531ad48"/>
-				<imageExpression><![CDATA["src/main/resources/reports/logo.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logoImage}]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
@@ -207,7 +210,7 @@
 	<detail>
 		<band height="350" splitType="Stretch">
 			<stackedBarChart>
-				<chart isShowLegend="true" evaluationTime="Master" customizerClass="com.onda.dashboard.reports.MyBarChartCustomizer" theme="aegean">
+				<chart isShowLegend="true" evaluationTime="Master" customizerClass="com.example.chartcustomizer.customizers.MyBarChartCustomizer" theme="aegean">
 					<reportElement x="51" y="5" width="700" height="340" isRemoveLineWhenBlank="true" uuid="04e122a0-7ba3-4852-81df-f7031ca3fc5c"/>
 					<chartTitle>
 						<titleExpression><![CDATA["TBF"]]></titleExpression>

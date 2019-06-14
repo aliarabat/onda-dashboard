@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public interface EquipementDao extends JpaRepository<Equipement, Long> {
 
-    public Equipement findByName(String name);
+    Equipement findByName(String name);
     
-    public List<Equipement> findByTypeName(String name);
+    List<Equipement> findByTypeName(String name);
 }

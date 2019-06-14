@@ -15,18 +15,18 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface EquipementService {
 
-    public int createEquipement(List<Equipement> equipements);
+    int createEquipement(List<Equipement> equipements);
 
-    public int editEquipement(Equipement newEquipement);
+    int editEquipement(Equipement newEquipement);
 
-    public int deleteEquipement(Long id);
+    int deleteEquipement(Long id);
 
-    public Equipement findByName(String name);
+    Equipement findByName(String name);
 
-    public List<Equipement> findAll();
+    List<Equipement> findAll();
 
-    public Equipement findById(Long id);
+    Equipement findById(Long id);
 
-    public List<Equipement> findByTypeName(String name);
+    List<Equipement> findByTypeName(String name);
 
 }

@@ -14,17 +14,17 @@ import java.util.List;
  */
 public interface TypeService {
 
-    public Type findByReferenceAndName(String reference, String name);
+    Type findByReferenceAndName(String reference, String name);
 
-    public int createType(Type type);
+    int createType(Type type);
 
-    public int editType(Type newType);
+    int editType(Type newType);
 
-    public int deleteType(Long id);
+    int deleteType(Long id);
 
-    public Type findById(Long id);
+    Type findById(Long id);
 
-    public Type findByName(String name);
+    Type findByName(String name);
 
-    public List<Type> findAllTypes();
+    List<Type> findAllTypes();
 }

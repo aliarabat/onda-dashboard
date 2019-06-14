@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TypeDao extends JpaRepository<Type, Long> {
 
-    public Type findByReferenceAndName(String reference, String name);
+    Type findByReferenceAndName(String reference, String name);
 
-    public Type findByName(String name);
+    Type findByName(String name);
 }

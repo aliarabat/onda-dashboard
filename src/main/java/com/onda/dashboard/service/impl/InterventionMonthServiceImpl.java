@@ -36,6 +36,7 @@ import com.onda.dashboard.util.InterventionMonthComparator;
 import com.onda.dashboard.util.JasperUtil;
 import com.onda.dashboard.util.MonthUtil;
 import com.onda.dashboard.util.NumberUtil;
+
 import java.io.ByteArrayOutputStream;
 
 import net.sf.jasperreports.engine.JRException;
@@ -159,8 +160,8 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
                 Double tbf = periodFunctionAchieved * 100 / functionalityTimeWantedHours;
 
                 /*
-				 * DecimalFormat df = new DecimalFormat(".##");
-				 * df.setRoundingMode(RoundingMode.DOWN); df.format(tbf)
+                 * DecimalFormat df = new DecimalFormat(".##");
+                 * df.setRoundingMode(RoundingMode.DOWN); df.format(tbf)
                  */
                 interventionMonthVo.setTbf(new BigDecimal(tbf).setScale(2, RoundingMode.DOWN).doubleValue());
             });
@@ -176,45 +177,46 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 
     @Override
     public void printDoc(HttpServletResponse response, int year, int month) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
+        List<InterventionMonth> interventionMonths = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
+        if (interventionMonths != null && !interventionMonths.isEmpty()) {
+            JasperPrint jasperPrint = null;
+            Map<String, Object> params = new HashMap<>();
 
-        List<InterventionMonthVo> list = interventionMonthsToPrint(
-                findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
+            List<InterventionMonthVo> list = interventionMonthsToPrint(interventionMonths);
 
-        Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
+            Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
 
-        String mois = MonthUtil.getMonth(month - 1);
-        calculateTotalTbf(list, params);
-        params.put("average", NumberUtil.scaleDoubletoTwo(average));
-        params.put("year", year);
-        params.put("month", mois);
+            String mois = MonthUtil.getMonth(month - 1);
+            calculateTotalTbf(list, params);
+            params.put("average", NumberUtil.scaleDoubletoTwo(average));
+            params.put("year", year);
+            params.put("month", mois);
 
-        OutputStream out = null;
+            OutputStream out = null;
 
-        try {
-            out = response.getOutputStream();
-            jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "pdf");
-            //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+            try {
+                out = response.getOutputStream();
+                jasperPrint = new JasperUtil().generateDoc(list, params, "Dashboard_Detail.jasper", "pdf");
+                //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 
-            JRPdfExporter pdfExporter = new JRPdfExporter();
-            pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
-            pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
-            pdfExporter.exportReport();
+                JRPdfExporter pdfExporter = new JRPdfExporter();
+                pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
+                pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
+                pdfExporter.exportReport();
 
-            response.setContentType("application/pdf");
-            response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", "attachement; filename=\"TableauDeBord" + mois + year + ".pdf" + "\"");
 
-            out.write(pdfReportStream.toByteArray());
-            out.close();
-            pdfReportStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+                out.write(pdfReportStream.toByteArray());
+                out.close();
+                pdfReportStream.close();
+            } catch (FileNotFoundException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
+            } catch (JRException | IOException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
+            }
         }
-
     }
 
     private void calculateTotalTbf(List<InterventionMonthVo> list, Map<String, Object> params) {
@@ -267,46 +269,49 @@ public class InterventionMonthServiceImpl implements InterventionMonthService {
 
     @Override
     public void printGraph(HttpServletResponse response, int year, int month, double object) {
-        JasperPrint jasperPrint = null;
-        Map<String, Object> params = new HashMap<>();
+        List<InterventionMonth> interventionMonths = findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1)));
+        if (interventionMonths != null && !interventionMonths.isEmpty()) {
+            JasperPrint jasperPrint = null;
+            Map<String, Object> params = new HashMap<>();
 
-        List<InterventionMonthVo> list = interventionMonthsToPrint(
-                findByInterventionDateOrderByEquipementTypeNameAscIdAsc(DateUtil.toDate(LocalDate.of(year, month, 1))));
-        InterventionMonthVo interventionMonthMin = Collections.min(list, new InterventionMonthComparator());
+            List<InterventionMonthVo> list = interventionMonthsToPrint(interventionMonths);
+            InterventionMonthVo interventionMonthMin = Collections.min(list, new InterventionMonthComparator());
 
-        Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
+            Double average = list.stream().mapToDouble(item -> item.getTbf()).average().getAsDouble();
 
-        String mois = MonthUtil.getMonth(month - 1);
+            String mois = MonthUtil.getMonth(month - 1);
 
-        params.put("tbfMin", interventionMonthMin.getTbf().intValue());
-        params.put("object", NumberUtil.scaleDoubletoTwo(object));
-        params.put("average", NumberUtil.scaleDoubletoTwo(average));
-        params.put("month", mois);
-        params.put("year", year);
+            params.put("tbfMin", interventionMonthMin.getTbf().intValue());
+            params.put("object", NumberUtil.scaleDoubletoTwo(object));
+            params.put("average", NumberUtil.scaleDoubletoTwo(average));
+            params.put("month", mois);
+            params.put("year", year);
+            params.put("logoImage", getClass().getClassLoader().getResourceAsStream("reports/logo.png"));
 
-        OutputStream out = null;
+            OutputStream out = null;
 
-        try {
-            out = response.getOutputStream();
-            jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
-            //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+            try {
+                out = response.getOutputStream();
+                jasperPrint = new JasperUtil().generateDoc(list, params, "TBF_Detail.jasper", "pdf");
+                //JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 
-            JRPdfExporter pdfExporter = new JRPdfExporter();
-            pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
-            pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
-            pdfExporter.exportReport();
+                JRPdfExporter pdfExporter = new JRPdfExporter();
+                pdfExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream();
+                pdfExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfReportStream));
+                pdfExporter.exportReport();
 
-            response.setContentType("application/pdf");
-            response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", "attachement; filename=\"tbf" + mois + year + ".pdf" + "\"");
 
-            out.write(pdfReportStream.toByteArray());
-            out.close();
-            pdfReportStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        } catch (JRException | IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+                out.write(pdfReportStream.toByteArray());
+                out.close();
+                pdfReportStream.close();
+            } catch (FileNotFoundException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
+            } catch (JRException | IOException e) {
+                System.out.println(Arrays.toString(e.getStackTrace()));
+            }
         }
     }
 
