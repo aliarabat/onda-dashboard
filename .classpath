@@ -28,6 +28,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/hp/Documents/NetBeansProjects/MyCustomiser.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hp/.m2/repository/com/onda/chartcustomiser/1.0.1/chartcustomiser-1.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

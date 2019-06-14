@@ -210,7 +210,7 @@
 	<detail>
 		<band height="350" splitType="Stretch">
 			<stackedBarChart>
-				<chart isShowLegend="true" evaluationTime="Master" customizerClass="com.example.chartcustomizer.customizers.MyBarChartCustomizer" theme="aegean">
+				<chart isShowLegend="true" evaluationTime="Master" customizerClass="com.onda.chartcustomiser.MyBarChartCustomiser" theme="aegean">
 					<reportElement x="51" y="5" width="700" height="340" isRemoveLineWhenBlank="true" uuid="04e122a0-7ba3-4852-81df-f7031ca3fc5c"/>
 					<chartTitle>
 						<titleExpression><![CDATA["TBF"]]></titleExpression>
