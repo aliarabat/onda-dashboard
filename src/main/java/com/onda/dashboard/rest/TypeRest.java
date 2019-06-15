@@ -27,7 +27,7 @@ import com.onda.dashboard.service.TypeService;
  * @author AMINE
  */
 @RestController
-@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk" })
+@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk", "http://localhost:4200" })
 @RequestMapping("/dashboard-api/dashboards/type")
 public class TypeRest {
 

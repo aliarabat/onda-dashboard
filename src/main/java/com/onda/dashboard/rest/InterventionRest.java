@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.onda.dashboard.service.EquipementService;
 
 @RestController
-@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk" })
+@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk", "http://localhost:4200" })
 @RequestMapping("dashboard-api")
 public class InterventionRest {
 

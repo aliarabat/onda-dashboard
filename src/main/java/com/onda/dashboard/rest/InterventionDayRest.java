@@ -29,7 +29,7 @@ import com.onda.dashboard.service.InterventionMonthService;
  * @author AMINE
  */
 @RestController
-@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk" })
+@CrossOrigin(origins = { "https://onda-marrakech.firebaseapp.com", "https://onda-menara.tk", "http://localhost:4200" })
 @RequestMapping("/dashboard-api/dashboards/interventionDay")
 public class InterventionDayRest {
 
