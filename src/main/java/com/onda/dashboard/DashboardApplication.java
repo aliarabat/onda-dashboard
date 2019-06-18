@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@EnableDiscoveryClient
 public class DashboardApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DashboardApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DashboardApplication.class, args);
+    }
 
 }
